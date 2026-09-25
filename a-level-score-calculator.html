@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>A-Level UAS Calculator | APlus Achiever</title>
+<style>
+:root{--g:#718f7a;--gd:#536f5d;--gl:#edf4ef;--bg:#f7faf8;--dk:#243029;--mut:#718078;--bd:#dce5df}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;background:var(--bg);color:var(--dk);line-height:1.55}
+header{position:sticky;top:0;z-index:5;background:#fff;border-bottom:1px solid var(--bd)}.head{max-width:1100px;margin:auto;padding:15px 20px;display:flex;justify-content:space-between;align-items:center}
+.brand{display:flex;gap:10px;align-items:center;font-weight:800}.logo{width:40px;height:40px;border-radius:11px;background:var(--g);color:#fff;display:grid;place-items:center}.brand small{display:block;color:var(--mut);font-weight:500}
+button{cursor:pointer}.topbtn,.cta,.submit{border:0;background:var(--g);color:#fff;font-weight:800;border-radius:11px;padding:12px 18px}.topbtn:hover,.cta:hover,.submit:hover{background:var(--gd)}
+.hero{padding:55px 20px;text-align:center;background:linear-gradient(135deg,#f3f9f5,#eef5f0)}.tag{display:inline-block;background:#e2eee6;color:var(--gd);padding:6px 12px;border-radius:20px;font-size:11px;font-weight:800;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,52px);line-height:1.08;margin:16px 0 10px}.hero p{max-width:700px;margin:auto;color:var(--mut)}
+main{max-width:1100px;margin:auto;padding:28px 20px 70px}.card{background:#fff;border:1px solid var(--bd);border-radius:18px;padding:26px;margin-bottom:20px;box-shadow:0 10px 30px #364c3f12}.title{margin-bottom:20px}.title h2{margin:0;font-size:21px}.title p{margin:4px 0 0;color:var(--mut);font-size:13px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.grid2{grid-template-columns:repeat(2,1fr)}
+label{display:block;font-size:13px;font-weight:750;margin-bottom:6px}select,input,textarea{width:100%;border:1px solid #d5dfd8;background:#fbfdfb;border-radius:10px;padding:11px 12px;outline:0}select:focus,input:focus,textarea:focus{border-color:var(--g);box-shadow:0 0 0 3px #718f7a1f}.grade{margin-top:8px}
+.result{background:linear-gradient(145deg,#f2f8f4,#fff)}.scores{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.score{background:#fff;border:1px solid var(--bd);border-radius:14px;padding:18px}.score.main{background:var(--g);color:#fff}.score span{font-size:11px;text-transform:uppercase;letter-spacing:.5px}.score strong{display:block;font-size:29px;margin-top:3px}.score.main strong{font-size:38px}
+.rows{display:grid;gap:9px;margin-top:20px}.row{display:grid;grid-template-columns:1fr auto auto;gap:16px;align-items:center;border:1px solid var(--bd);border-radius:11px;padding:12px 14px}.row small{display:block;color:var(--mut)}.status{padding:4px 9px;border-radius:18px;font-size:10px;font-weight:800}.yes{background:#e3f1e7;color:#41624c}.no{background:#f0f2f1;color:#77817b}.h3{background:#f2ecdf;color:#786644}
+.target{background:linear-gradient(135deg,#f1f7f3,#fff)}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}.stat{background:#fff;border:1px solid var(--bd);border-radius:13px;padding:15px}.stat span{font-size:11px;color:var(--mut)}.stat strong{display:block;font-size:24px}.plans{display:grid;gap:9px;margin-top:15px}.plan{background:#fff;border:1px solid var(--bd);border-radius:11px;padding:14px}.plan b{display:block}.badge{display:inline-block;margin-top:7px;background:#e7f2ea;color:#46634f;border-radius:15px;padding:3px 8px;font-size:10px;font-weight:800}
+.ctabox{margin-top:20px;padding:20px;border-radius:15px;background:var(--gl);display:flex;justify-content:space-between;align-items:center;gap:18px}.ctabox h3{margin:0 0 3px}.ctabox p{margin:0;color:var(--mut);font-size:13px}
+.modalbg{display:none;position:fixed;inset:0;background:#1c27207a;z-index:20;align-items:center;justify-content:center;padding:20px}.modalbg.on{display:flex}.modal{background:#fff;border-radius:19px;padding:27px;width:min(540px,100%);max-height:90vh;overflow:auto;position:relative}.close{position:absolute;right:14px;top:14px;border:0;border-radius:50%;width:34px;height:34px}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0}.summary div{background:var(--gl);padding:10px;text-align:center;border-radius:10px}.summary span{display:block;font-size:10px;color:var(--mut)}.form{display:grid;gap:13px}textarea{min-height:90px;resize:vertical}.footer{text-align:center;padding:25px;color:var(--mut);font-size:12px;border-top:1px solid var(--bd)}
+@media(max-width:750px){.grid,.grid2,.scores,.stats{grid-template-columns:1fr}.ctabox{display:block}.cta{width:100%;margin-top:14px}.topbtn{display:none}.row{grid-template-columns:1fr auto}.row .points{grid-column:2;grid-row:1}.summary{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="head"><div class="brand"><div class="logo">A+</div><div>APlus Achiever<small>A-Level UAS Calculator</small></div></div><button class="topbtn" onclick="openConsult()">Plan Your A-Level Pathway →</button></div></header>
+<section class="hero"><span class="tag">Singapore A-Level</span><h1>A-Level UAS Calculator</h1><p>Calculate your University Admission Score and explore possible pathways to reach your target UAS.</p></section>
+<main>
+<section class="card"><div class="title"><h2>H2 Content Subjects</h2><p>Enter three H2 content subjects. The calculator identifies the Best 3 H2 automatically.</p></div><div class="grid" id="h2grid"></div></section>
+<section class="card"><div class="title"><h2>Fourth Content Subject</h2><p>Enter an optional H1 or H2 content subject. It is used only when it improves the UAS.</p></div><div class="grid grid2"><div><label>Subject</label><select id="fourthSub"></select></div><div><label>Level</label><select id="fourthLvl"><option value="">Select Level</option><option>H1</option><option>H2</option></select></div><div><label>Grade</label><select id="fourthGr"></select></div></div></section>
+<section class="card"><div class="title"><h2>General Paper</h2><p>GP contributes up to 10 points.</p></div><div style="max-width:320px"><label>GP Grade</label><select id="gp"></select></div></section>
+<section class="card"><div class="title"><h2>H3 Additional Academic Evidence</h2><p>H3 is displayed separately and does not contribute to UAS.</p></div><div class="grid grid2" id="h3grid"></div></section>
+<section class="card result"><div class="title"><h2>Your UAS Result</h2><p>Maximum UAS: 70 points.</p></div><div class="scores"><div class="score main"><span>Final UAS</span><strong id="final">—</strong></div><div class="score"><span>Base UAS</span><strong id="base">—</strong></div><div class="score"><span>Fourth Subject</span><strong id="fourthEffect">—</strong></div></div><p id="note" style="color:var(--mut);font-size:13px">Complete your grades to calculate your UAS.</p><div class="rows" id="rows"></div></section>
+<section class="card target"><div class="title"><h2>Target UAS Planner</h2><p>Set a target and see possible grade-improvement paths.</p></div><div style="max-width:340px"><label>Target UAS</label><input id="target" type="number" min="0" max="70" step=".01" placeholder="e.g. 65"></div><div class="stats"><div class="stat"><span>Current UAS</span><strong id="cur">—</strong></div><div class="stat"><span>Target UAS</span><strong id="tar">—</strong></div><div class="stat"><span>Gap</span><strong id="gap">—</strong></div></div><div id="msg" style="margin-top:15px;color:var(--mut)">Enter a target UAS to see your pathway.</div><div class="plans" id="plans"></div><div class="ctabox"><div><h3>Ready to plan your A-Level pathway?</h3><p>Get personalised guidance based on your current and target UAS.</p></div><button class="cta" onclick="openConsult()">Plan Your A-Level Pathway →</button></div></section>
+</main>
+<footer class="footer"><b>APlus Achiever</b> · A-Level UAS Calculator</footer>
+
+<div class="modalbg" id="modal" onclick="outside(event)"><div class="modal"><button class="close" onclick="closeConsult()">×</button><h2>Plan Your A-Level Pathway</h2><p style="color:var(--mut);font-size:13px">Get personalised guidance based on your A-Level results and target UAS.</p><div class="summary"><div><span>Current UAS</span><b id="cCur">—</b></div><div><span>Target UAS</span><b id="cTar">—</b></div><div><span>Gap</span><b id="cGap">—</b></div></div><form class="form" onsubmit="sendWA(event)"><div><label>Name</label><input id="name" required placeholder="Your name"></div><div><label>WhatsApp Number</label><input id="phone" required placeholder="e.g. 9881 6223"></div><div><label>JC / School</label><input id="school" placeholder="Your JC / School"></div><div><label>What would you like help with?</label><select id="topic"><option>Understanding my UAS</option><option>Improving my A-Level grades</option><option>University admission planning</option><option>Subject / course planning</option><option>A-Level tuition</option><option>Other</option></select></div><div><label>Message</label><textarea id="message"></textarea></div><button class="submit">Send Consultation Request via WhatsApp →</button></form></div></div>
+
+<script>
+const WHATSAPP_NUMBER="6598816223";
+const subjects=["Biology","Chemistry","Physics","Mathematics","Further Mathematics","Computing","Economics","Geography","History","Literature in English","Art","Music","China Studies in English","China Studies in Chinese","Chinese Language & Literature","Malay Language & Literature","Tamil Language & Literature","Management of Business","Principles of Accounts","Knowledge & Inquiry","Other"];
+const grades=["A","B","C","D","E","S","U"],h2pts={A:20,B:17.5,C:15,D:12.5,E:10,S:5,U:0},h1pts={A:10,B:8.75,C:7.5,D:6.25,E:5,S:2.5,U:0},rank={U:0,S:1,E:2,D:3,C:4,B:5,A:6};
+const $=id=>document.getElementById(id);
+function subjectSelect(id){let s=$(id);s.innerHTML='<option value="">Select Subject</option>'+subjects.map(x=>'<option>'+x+'</option>').join('')}
+function gradeSelect(id){let s=$(id);s.innerHTML='<option value="">Select Grade</option>'+grades.map(x=>'<option>'+x+'</option>').join('')}
+function init(){
+  for(let i=1;i<=3;i++){let box=document.createElement("div");box.innerHTML='<label>H2 Subject '+i+'</label><select id="s'+i+'"></select><select class="grade" id="g'+i+'"></select>';$("h2grid").appendChild(box);subjectSelect("s"+i);gradeSelect("g"+i)}
+  subjectSelect("fourthSub");gradeSelect("fourthGr");gradeSelect("gp");
+  for(let i=1;i<=2;i++){let box=document.createElement("div");box.innerHTML='<label>H3 Subject '+i+'</label><select id="h3s'+i+'"></select><select class="grade" id="h3g'+i+'"></select>';$("h3grid").appendChild(box);subjectSelect("h3s"+i);gradeSelect("h3g"+i)}
+  document.querySelectorAll("select").forEach(x=>x.addEventListener("change",calc));$("target").addEventListener("input",planner);
+}
+function data(){
+ let h=[];for(let i=1;i<=3;i++)if($("s"+i).value&&$("g"+i).value)h.push({subject:$("s"+i).value,grade:$("g"+i).value});
+ let fourth=$("fourthSub").value&&$("fourthLvl").value&&$("fourthGr").value?{subject:$("fourthSub").value,level:$("fourthLvl").value,grade:$("fourthGr").value}:null;
+ return {h,gp:$("gp").value,fourth}
+}
+function score(d){
+ if(d.h.length<3||!d.gp)return null;
+ let best=[...d.h].sort((a,b)=>h2pts[b.grade]-h2pts[a.grade]).slice(0,3),base=best.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp],final=base,used=false,reb=null;
+ if(d.fourth){
+   let raw=d.fourth.level==="H1"?base+h1pts[d.fourth.grade]:d.h.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp];
+   reb=d.fourth.level==="H1"?raw/80*70:raw/90*70;
+   if(reb>base){final=reb;used=true}
+ }
+ return {best,base,final,used,reb}
+}
+function calc(){
+ let d=data(),r=score(d);if(!r){$("final").textContent=$("base").textContent=$("fourthEffect").textContent="—";$("rows").innerHTML="";$("note").textContent="Complete all three H2 grades and GP to calculate your UAS.";planner();return}
+ $("final").textContent=r.final.toFixed(2);$("base").textContent=r.base.toFixed(2);$("fourthEffect").textContent=d.fourth?(r.used?"+"+(r.final-r.base).toFixed(2):"No Gain"):"—";$("note").textContent=r.used?"Your fourth content subject improves the UAS and is included.":"Your UAS is based on the Best 3 H2 subjects and GP.";
+ let best=new Set(r.best.map(x=>x.subject)),html=d.h.map(x=>'<div class="row"><div><b>'+x.subject+'</b><small>H2 · '+x.grade+'</small></div><span class="status '+(best.has(x.subject)?"yes":"no")+'">'+(best.has(x.subject)?"Counted":"Not Counted")+'</span><b class="points">'+h2pts[x.grade].toFixed(2)+'</b></div>').join("");
+ html+='<div class="row"><div><b>General Paper</b><small>H1 · '+d.gp+'</small></div><span class="status yes">Counted</span><b>'+h1pts[d.gp].toFixed(2)+'</b></div>';
+ if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted":"Not Counted")+'</span><b>'+(r.used?(r.final-r.base).toFixed(2):"—")+'</b></div>';
+ for(let i=1;i<=2;i++)if($("h3s"+i).value&&$("h3g"+i).value)html+='<div class="row"><div><b>'+$("h3s"+i).value+'</b><small>H3 · '+$("h3g"+i).value+'</small></div><span class="status h3">H3</span><b>0</b></div>';
+ $("rows").innerHTML=html;planner();
+}
+function planner(){
+ let d=data(),r=score(d),t=parseFloat($("target").value);$("cur").textContent=r?r.final.toFixed(2):"—";$("tar").textContent=Number.isFinite(t)?t.toFixed(2):"—";$("plans").innerHTML="";
+ if(!r||!Number.isFinite(t)||t<0||t>70){$("gap").textContent="—";$("msg").textContent=!r?"Complete your grades first.":"Enter a target UAS between 0 and 70.";return}
+ let gap=Math.max(0,t-r.final);$("gap").textContent=gap.toFixed(2);if(gap<=.0001){$("msg").innerHTML="🎯 <b>Target UAS achieved.</b>";return}
+ $("msg").textContent="Your target is "+gap.toFixed(2)+" points above your current UAS.";
+ let current=d.h.map(x=>x.grade).concat(d.gp,d.fourth?d.fourth.grade:[]),choices=grades,plans=[];
+ function rec(i,g){
+   if(i===current.length){
+     let hh=d.h.map((x,j)=>({subject:x.subject,grade:g[j]})),gp=g[3],f=d.fourth?{...d.fourth,grade:g[4]}:null,rr=score({h:hh,gp,f});if(!rr||rr.final<t-.0001)return;
+     let imp=[];current.forEach((old,j)=>{if(rank[g[j]]>rank[old])imp.push(j)});if(!imp.length)return;
+     plans.push({n:imp.length,score:rr.final,items:imp.map(j=>({subject:j<3?d.h[j].subject:j===3?"General Paper":d.fourth.subject,from:current[j],to:g[j]}))});return;
+   }
+   choices.forEach(x=>{if(rank[x]>=rank[current[i]])rec(i+1,g.concat(x))});
+ }
+ rec(0,[]);plans.sort((a,b)=>a.n-b.n||a.score-b.score);let seen=new Set();
+ plans.filter(p=>{let k=p.items.map(x=>x.subject+x.from+x.to).join("|");if(seen.has(k))return false;seen.add(k);return true}).slice(0,5).forEach((p,i)=>{$("plans").innerHTML+='<div class="plan"><b>Pathway '+(i+1)+'</b><span>'+p.items.map(x=>x.subject+" "+x.from+" → "+x.to).join(" · ")+'</span><div class="badge">Projected UAS: '+p.score.toFixed(2)+'</div></div>'});
+ if(!$("plans").innerHTML)$("plans").innerHTML='<div class="plan"><b>No improvement path found within the current subjects.</b><span>Consider reviewing your pathway with an education consultant.</span></div>';
+}
+function openConsult(){let r=score(data()),t=parseFloat($("target").value),c=r?r.final:null;$("cCur").textContent=c?c.toFixed(2):"Not calculated";$("cTar").textContent=Number.isFinite(t)?t.toFixed(2):"Not set";$("cGap").textContent=c&&Number.isFinite(t)?Math.max(0,t-c).toFixed(2):"—";$("message").value=(c?"My current UAS is "+c.toFixed(2)+". ":"")+(Number.isFinite(t)?"My target UAS is "+t.toFixed(2)+". ":"")+"I would like personalised guidance on my A-Level pathway.";$("modal").classList.add("on")}
+function closeConsult(){$("modal").classList.remove("on")}function outside(e){if(e.target===$("modal"))closeConsult()}
+function sendWA(e){e.preventDefault();let text="Hello APlus Achiever,\n\nI would like to plan my A-Level pathway.\n\nName: "+$("name").value+"\nWhatsApp: "+$("phone").value+"\nJC / School: "+$("school").value+"\nCurrent UAS: "+$("cCur").textContent+"\nTarget UAS: "+$("cTar").textContent+"\nUAS Gap: "+$("cGap").textContent+"\nArea of Interest: "+$("topic").value+"\n\nMessage:\n"+$("message").value;window.open("https://wa.me/"+WHATSAPP_NUMBER+"?text="+encodeURIComponent(text),"_blank")}
+init();
+</script>
+</body>
+</html>
