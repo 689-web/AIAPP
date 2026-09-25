@@ -51,8 +51,8 @@ function init(){
 }
 function data(){
  let h=[];for(let i=1;i<=3;i++)if($("s"+i).value&&$("g"+i).value)h.push({subject:$("s"+i).value,level:"H2",grade:$("g"+i).value});
- let fourth=$("#fourthSub").value&&$("#fourthLvl").value&&$("#fourthGr").value?{subject:$("#fourthSub").value,level:$("#fourthLvl").value,grade:$("#fourthGr").value}:null;
- return {h,gp:$("#gp").value,fourth}
+ let fourth=$("fourthSub").value&&$("fourthLvl").value&&$("fourthGr").value?{subject:$("fourthSub").value,level:$("fourthLvl").value,grade:$("fourthGr").value}:null;
+ return {h,gp:$("gp").value,fourth}
 }
 function score(d){
  if(d.h.length<3||!d.gp)return null;
@@ -98,7 +98,7 @@ function planner(){
  let current=d.h.map(x=>x.grade).concat(d.gp,d.fourth?d.fourth.grade:[]),choices=grades,plans=[];
  function rec(i,g){
    if(i===current.length){
-     let hh=d.h.map((x,j)=>({subject:x.subject,grade:g[j]})),gp=g[3],f=d.fourth?{...d.fourth,grade:g[4]}:null,rr=score({h:hh,gp,f});if(!rr||rr.final<t-.0001)return;
+     let hh=d.h.map((x,j)=>({subject:x.subject,level:"H2",grade:g[j]})),gp=g[3],f=d.fourth?{...d.fourth,grade:g[4]}:null,rr=score({h:hh,gp,f});if(!rr||rr.final<t-.0001)return;
      let imp=[];current.forEach((old,j)=>{if(rank[g[j]]>rank[old])imp.push(j)});if(!imp.length)return;
      plans.push({n:imp.length,score:rr.final,items:imp.map(j=>({subject:j<3?d.h[j].subject:j===3?"General Paper":d.fourth.subject,from:current[j],to:g[j]}))});return;
    }
