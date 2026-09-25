@@ -50,7 +50,7 @@ function init(){
   document.querySelectorAll("select").forEach(x=>x.addEventListener("change",calc));$("target").addEventListener("input",planner);
 }
 function data(){
- let h=[];for(let i=1;i<=3;i++)if($("#s"+i).value&&$("#g"+i).value)h.push({subject:$("#s"+i).value,level:"H2",grade:$("#g"+i).value});
+ let h=[];for(let i=1;i<=3;i++)if($("s"+i).value&&$("g"+i).value)h.push({subject:$("s"+i).value,level:"H2",grade:$("g"+i).value});
  let fourth=$("#fourthSub").value&&$("#fourthLvl").value&&$("#fourthGr").value?{subject:$("#fourthSub").value,level:$("#fourthLvl").value,grade:$("#fourthGr").value}:null;
  return {h,gp:$("#gp").value,fourth}
 }
