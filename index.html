@@ -55,7 +55,7 @@ body.locked>#passwordGate{display:flex!important}
 </form>
 </div>
 </div>
-<div class="wrap">
+<div class="wrap" id="protectedContent" hidden>
   <div class="topbar"><div class="topbar-title">ADMISSIONS PLANNER · AY2026</div><div class="topbar-actions"><button type="button" id="homeBtn" aria-label="回到顶部">顶部</button></div><button type="button" class="back-top" id="backTop" aria-label="回到顶部" title="回到顶部">↑</button></div>
   <header class="top">
     <h1>医科与法律申请规划</h1>
@@ -117,8 +117,8 @@ body.locked>#passwordGate{display:flex!important}
 </div>
 <script>
 const PASSWORD_HASH='1fd8607cb9f85718678a131c8dc73d434c5ff6d78462e7e5dcd08b8ab90bae58';
-const passwordGate=document.getElementById('passwordGate'),passwordForm=document.getElementById('passwordForm'),passwordInput=document.getElementById('passwordInput'),passwordError=document.getElementById('passwordError');
-const unlock=()=>{document.body.classList.remove('locked');passwordGate.remove();};
+const passwordGate=document.getElementById('passwordGate'),passwordForm=document.getElementById('passwordForm'),passwordInput=document.getElementById('passwordInput'),passwordError=document.getElementById('passwordError'),protectedContent=document.getElementById('protectedContent');
+const unlock=()=>{document.body.classList.remove('locked');protectedContent.hidden=false;passwordGate.remove();};
 const sha256=async value=>{const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');};
 passwordForm.addEventListener('submit',async e=>{e.preventDefault();passwordError.textContent='';const hash=await sha256(passwordInput.value);if(hash===PASSWORD_HASH){unlock();}else{passwordError.textContent='密码错误，请重新输入。';passwordInput.value='';passwordInput.focus();}});
 const homeBtn=document.getElementById('homeBtn'),backTop=document.getElementById('backTop'),goTop=()=>window.scrollTo({top:0,behavior:'smooth'});
