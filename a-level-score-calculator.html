@@ -28,7 +28,7 @@ label{display:block;font-size:13px;font-weight:750;margin-bottom:6px}select,inpu
 <section class="card"><div class="title"><h2>H2 Content Subjects</h2><p>Enter three H2 content subjects. The calculator identifies the Best 3 H2 automatically.</p></div><div class="grid" id="h2grid"></div></section>
 <section class="card"><div class="title"><h2>Fourth Content Subject</h2><p>Enter a fourth content subject. If it is H2, it competes with the other H2 subjects and the Best 3 H2 are counted automatically.</p></div><div class="grid grid2"><div><label>Subject</label><select id="fourthSub"></select></div><div><label>Level</label><select id="fourthLvl"><option value="">Select Level</option><option>H1</option><option>H2</option></select></div><div><label>Grade</label><select id="fourthGr"></select></div></div></section>
 <section class="card"><div class="title"><h2>General Paper</h2><p>GP contributes up to 10 points.</p></div><div style="max-width:320px"><label>GP Grade</label><select id="gp"></select></div></section>
-<section class="card"><div class="title"><h2>H3 Additional Academic Evidence</h2><p>H3 is displayed separately and does not contribute to UAS.</p></div><div class="grid grid2" id="h3grid"></div></section>
+<section class="card"><div class="title"><h2>H3 Additional Academic Evidence</h2><p>H3 is displayed as Additional Academic Evidence and does not contribute to UAS. Official H3 grades: Distinction, Merit, Pass or Ungraded.</p></div><div class="grid grid2" id="h3grid"></div></section>
 <section class="card result"><div class="title"><h2>Your UAS Result</h2><p>Maximum UAS: 70 points.</p></div><div class="scores"><div class="score main"><span>Final UAS</span><strong id="final">—</strong></div><div class="score"><span>Base UAS</span><strong id="base">—</strong></div><div class="score"><span>Fourth Subject</span><strong id="fourthEffect">—</strong></div></div><p id="note" style="color:var(--mut);font-size:13px">Complete your grades to calculate your UAS.</p><div class="rows" id="rows"></div></section>
 <section class="card target"><div class="title"><h2>Target UAS Planner</h2><p>Set a target and see possible grade-improvement paths.</p></div><div style="max-width:340px"><label>Target UAS</label><input id="target" type="number" min="0" max="70" step=".01" placeholder="e.g. 65"></div><div class="stats"><div class="stat"><span>Current UAS</span><strong id="cur">—</strong></div><div class="stat"><span>Target UAS</span><strong id="tar">—</strong></div><div class="stat"><span>Gap</span><strong id="gap">—</strong></div></div><div id="msg" style="margin-top:15px;color:var(--mut)">Enter a target UAS to see your pathway.</div><div class="plans" id="plans"></div><div class="ctabox"><div><h3>Ready to plan your A-Level pathway?</h3><p>Get personalised guidance based on your current and target UAS.</p></div><button class="cta" onclick="openConsult()">Plan Your A-Level Pathway →</button></div></section>
 </main>
@@ -42,11 +42,11 @@ const subjects=["Biology","Chemistry","Physics","Mathematics","Further Mathemati
 const grades=["A","B","C","D","E","S","U"],h2pts={A:20,B:17.5,C:15,D:12.5,E:10,S:5,U:0},h1pts={A:10,B:8.75,C:7.5,D:6.25,E:5,S:2.5,U:0},rank={U:0,S:1,E:2,D:3,C:4,B:5,A:6};
 const $=id=>document.getElementById(id);
 function subjectSelect(id){let s=$(id);s.innerHTML='<option value="">Select Subject</option>'+subjects.map(x=>'<option>'+x+'</option>').join('')}
-function gradeSelect(id){let s=$(id);s.innerHTML='<option value="">Select Grade</option>'+grades.map(x=>'<option>'+x+'</option>').join('')}
+function gradeSelect(id){let s=$(id);s.innerHTML='<option value="">Select Grade</option>'+grades.map(x=>'<option>'+x+'</option>').join('')} function h3GradeSelect(id){let s=$(id);s.innerHTML='<option value="">Select Grade</option><option>Distinction</option><option>Merit</option><option>Pass</option><option>Ungraded</option>'}
 function init(){
   for(let i=1;i<=3;i++){let box=document.createElement("div");box.innerHTML='<label>H2 Subject '+i+'</label><select id="s'+i+'"></select><select class="grade" id="g'+i+'"></select>';$("h2grid").appendChild(box);subjectSelect("s"+i);gradeSelect("g"+i)}
   subjectSelect("fourthSub");gradeSelect("fourthGr");gradeSelect("gp");
-  for(let i=1;i<=2;i++){let box=document.createElement("div");box.innerHTML='<label>H3 Subject '+i+'</label><select id="h3s'+i+'"></select><select class="grade" id="h3g'+i+'"></select>';$("h3grid").appendChild(box);subjectSelect("h3s"+i);gradeSelect("h3g"+i)}
+  for(let i=1;i<=2;i++){let box=document.createElement("div");box.innerHTML='<label>H3 Subject '+i+'</label><select id="h3s'+i+'"></select><select class="grade" id="h3g'+i+'"></select>';$("h3grid").appendChild(box);subjectSelect("h3s"+i);h3GradeSelect("h3g"+i)}
   document.querySelectorAll("select").forEach(x=>x.addEventListener("change",calc));$("target").addEventListener("input",planner);
 }
 function data(){
@@ -69,7 +69,7 @@ function calc(){
  let best=new Set(r.best.map(x=>x.subject)),html=d.h.map(x=>'<div class="row"><div><b>'+x.subject+'</b><small>H2 · '+x.grade+'</small></div><span class="status '+(best.has(x.subject)?"yes":"no")+'">'+(best.has(x.subject)?"Counted":"Not Counted")+'</span><b class="points">'+h2pts[x.grade].toFixed(2)+'</b></div>').join("");
  html+='<div class="row"><div><b>General Paper</b><small>H1 · '+d.gp+'</small></div><span class="status yes">Counted</span><b>'+h1pts[d.gp].toFixed(2)+'</b></div>';
  if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted":"Not Counted")+'</span><b>'+(d.fourth.level==="H2"?h2pts[d.fourth.grade]:h1pts[d.fourth.grade]).toFixed(2)+'</b></div>';
- for(let i=1;i<=2;i++)if($("h3s"+i).value&&$("h3g"+i).value)html+='<div class="row"><div><b>'+$("h3s"+i).value+'</b><small>H3 · '+$("h3g"+i).value+'</small></div><span class="status h3">H3</span><b>0</b></div>';
+ for(let i=1;i<=2;i++)if($("h3s"+i).value&&$("h3g"+i).value)html+='<div class="row"><div><b>'+$("h3s"+i).value+'</b><small>H3 · '+$("h3g"+i).value+'</small></div><span class="status h3">Additional</span><b>—</b></div>';
  $("rows").innerHTML=html;planner();
 }
 function planner(){
