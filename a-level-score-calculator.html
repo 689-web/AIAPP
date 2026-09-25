@@ -56,19 +56,24 @@ function data(){
 }
 function score(d){
  if(d.h.length<3||!d.gp)return null;
- let candidates=[...d.h];
- if(d.fourth&&d.fourth.level==="H2") candidates.push({subject:d.fourth.subject,grade:d.fourth.grade});
- let best=candidates.sort((a,b)=>h2pts[b.grade]-h2pts[a.grade]).slice(0,3);
- let base=best.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp];
- let fourthCounted=!!(d.fourth&&d.fourth.level==="H2"&&best.some(x=>x.subject===d.fourth.subject));
- return {best,base,final:base,used:fourthCounted,reb:null}
+ const h2Sorted=[...d.h].sort((a,b)=>h2pts[b.grade]-h2pts[a.grade]);
+ const best=h2Sorted.slice(0,3);
+ const base=best.reduce((sum,x)=>sum+h2pts[x.grade],0)+h1pts[d.gp];
+ const fourth=d.fourth&&d.fourth.subject&&d.fourth.grade?{...d.fourth}:null;
+ let final=base,used=false,rebased=null;
+ if(fourth){
+   const fourthH1Points=fourth.level==="H2" ? h2pts[fourth.grade]/2 : h1pts[fourth.grade];
+   const candidate=(base+fourthH1Points)*70/80;
+   if(candidate>base){final=candidate;used=true;rebased=candidate;}
+ }
+ return {best,base,final,used,rebased,fourth};
 }
 function calc(){
  let d=data(),r=score(d);if(!r){$("final").textContent=$("base").textContent=$("fourthEffect").textContent="—";$("rows").innerHTML="";$("note").textContent="Complete all three H2 grades and GP to calculate your UAS.";planner();return}
- $("final").textContent=r.final.toFixed(2);$("base").textContent=r.base.toFixed(2);$("fourthEffect").textContent=d.fourth?(r.used?"Counted":"Not Counted"):"—";$("note").textContent="Your UAS is based on the Best 3 H2 subjects and GP. If the fourth subject is H2, it competes for a Best 3 place.";
+ $("final").textContent=r.final.toFixed(2);$("base").textContent=r.base.toFixed(2);$("fourthEffect").textContent=d.fourth?(r.used?"Counted":"Not Counted"):"—";$("note").textContent=r.used?"The fourth content subject improves your UAS and has been included after rebasing to 70 points.":"Your UAS is based on the Best 3 H2 subjects and GP. The fourth content subject is included only if it improves the final UAS.";
  let best=new Set(r.best.map(x=>x.subject)),html=d.h.map(x=>'<div class="row"><div><b>'+x.subject+'</b><small>H2 · '+x.grade+'</small></div><span class="status '+(best.has(x.subject)?"yes":"no")+'">'+(best.has(x.subject)?"Counted":"Not Counted")+'</span><b class="points">'+h2pts[x.grade].toFixed(2)+'</b></div>').join("");
  html+='<div class="row"><div><b>General Paper</b><small>H1 · '+d.gp+'</small></div><span class="status yes">Counted</span><b>'+h1pts[d.gp].toFixed(2)+'</b></div>';
- if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted":"Not Counted")+'</span><b>'+(d.fourth.level==="H2"?h2pts[d.fourth.grade]:h1pts[d.fourth.grade]).toFixed(2)+'</b></div>';
+ if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted — Rebasing":"Not Counted")+'</span><b>'+(d.fourth.level==="H2"?(h2pts[d.fourth.grade]/2):h1pts[d.fourth.grade]).toFixed(2)+'</b></div>';
  for(let i=1;i<=2;i++)if($("h3s"+i).value&&$("h3g"+i).value)html+='<div class="row"><div><b>'+$("h3s"+i).value+'</b><small>H3 · '+$("h3g"+i).value+'</small></div><span class="status h3">Additional</span><b>—</b></div>';
  $("rows").innerHTML=html;planner();
 }
