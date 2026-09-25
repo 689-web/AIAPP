@@ -26,7 +26,7 @@ label{display:block;font-size:13px;font-weight:750;margin-bottom:6px}select,inpu
 <section class="hero"><span class="tag">Singapore A-Level</span><h1>A-Level UAS Calculator</h1><p>Calculate your University Admission Score and explore possible pathways to reach your target UAS.</p></section>
 <main>
 <section class="card"><div class="title"><h2>H2 Content Subjects</h2><p>Enter three H2 content subjects. The calculator identifies the Best 3 H2 automatically.</p></div><div class="grid" id="h2grid"></div></section>
-<section class="card"><div class="title"><h2>Fourth Content Subject</h2><p>Enter an optional H1 or H2 content subject. It is used only when it improves the UAS.</p></div><div class="grid grid2"><div><label>Subject</label><select id="fourthSub"></select></div><div><label>Level</label><select id="fourthLvl"><option value="">Select Level</option><option>H1</option><option>H2</option></select></div><div><label>Grade</label><select id="fourthGr"></select></div></div></section>
+<section class="card"><div class="title"><h2>Fourth Content Subject</h2><p>Enter a fourth content subject. If it is H2, it competes with the other H2 subjects and the Best 3 H2 are counted automatically.</p></div><div class="grid grid2"><div><label>Subject</label><select id="fourthSub"></select></div><div><label>Level</label><select id="fourthLvl"><option value="">Select Level</option><option>H1</option><option>H2</option></select></div><div><label>Grade</label><select id="fourthGr"></select></div></div></section>
 <section class="card"><div class="title"><h2>General Paper</h2><p>GP contributes up to 10 points.</p></div><div style="max-width:320px"><label>GP Grade</label><select id="gp"></select></div></section>
 <section class="card"><div class="title"><h2>H3 Additional Academic Evidence</h2><p>H3 is displayed separately and does not contribute to UAS.</p></div><div class="grid grid2" id="h3grid"></div></section>
 <section class="card result"><div class="title"><h2>Your UAS Result</h2><p>Maximum UAS: 70 points.</p></div><div class="scores"><div class="score main"><span>Final UAS</span><strong id="final">—</strong></div><div class="score"><span>Base UAS</span><strong id="base">—</strong></div><div class="score"><span>Fourth Subject</span><strong id="fourthEffect">—</strong></div></div><p id="note" style="color:var(--mut);font-size:13px">Complete your grades to calculate your UAS.</p><div class="rows" id="rows"></div></section>
@@ -56,20 +56,19 @@ function data(){
 }
 function score(d){
  if(d.h.length<3||!d.gp)return null;
- let best=[...d.h].sort((a,b)=>h2pts[b.grade]-h2pts[a.grade]).slice(0,3),base=best.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp],final=base,used=false,reb=null;
- if(d.fourth){
-   let raw=d.fourth.level==="H1"?base+h1pts[d.fourth.grade]:d.h.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp];
-   reb=d.fourth.level==="H1"?raw/80*70:raw/90*70;
-   if(reb>base){final=reb;used=true}
- }
- return {best,base,final,used,reb}
+ let candidates=[...d.h];
+ if(d.fourth&&d.fourth.level==="H2") candidates.push({subject:d.fourth.subject,grade:d.fourth.grade});
+ let best=candidates.sort((a,b)=>h2pts[b.grade]-h2pts[a.grade]).slice(0,3);
+ let base=best.reduce((a,x)=>a+h2pts[x.grade],0)+h1pts[d.gp];
+ let fourthCounted=!!(d.fourth&&d.fourth.level==="H2"&&best.some(x=>x.subject===d.fourth.subject));
+ return {best,base,final:base,used:fourthCounted,reb:null}
 }
 function calc(){
  let d=data(),r=score(d);if(!r){$("final").textContent=$("base").textContent=$("fourthEffect").textContent="—";$("rows").innerHTML="";$("note").textContent="Complete all three H2 grades and GP to calculate your UAS.";planner();return}
- $("final").textContent=r.final.toFixed(2);$("base").textContent=r.base.toFixed(2);$("fourthEffect").textContent=d.fourth?(r.used?"+"+(r.final-r.base).toFixed(2):"No Gain"):"—";$("note").textContent=r.used?"Your fourth content subject improves the UAS and is included.":"Your UAS is based on the Best 3 H2 subjects and GP.";
+ $("final").textContent=r.final.toFixed(2);$("base").textContent=r.base.toFixed(2);$("fourthEffect").textContent=d.fourth?(r.used?"Counted":"Not Counted"):"—";$("note").textContent="Your UAS is based on the Best 3 H2 subjects and GP. If the fourth subject is H2, it competes for a Best 3 place.";
  let best=new Set(r.best.map(x=>x.subject)),html=d.h.map(x=>'<div class="row"><div><b>'+x.subject+'</b><small>H2 · '+x.grade+'</small></div><span class="status '+(best.has(x.subject)?"yes":"no")+'">'+(best.has(x.subject)?"Counted":"Not Counted")+'</span><b class="points">'+h2pts[x.grade].toFixed(2)+'</b></div>').join("");
  html+='<div class="row"><div><b>General Paper</b><small>H1 · '+d.gp+'</small></div><span class="status yes">Counted</span><b>'+h1pts[d.gp].toFixed(2)+'</b></div>';
- if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted":"Not Counted")+'</span><b>'+(r.used?(r.final-r.base).toFixed(2):"—")+'</b></div>';
+ if(d.fourth)html+='<div class="row"><div><b>'+d.fourth.subject+'</b><small>'+d.fourth.level+' · '+d.fourth.grade+'</small></div><span class="status '+(r.used?"yes":"no")+'">'+(r.used?"Counted":"Not Counted")+'</span><b>'+(d.fourth.level==="H2"?h2pts[d.fourth.grade]:h1pts[d.fourth.grade]).toFixed(2)+'</b></div>';
  for(let i=1;i<=2;i++)if($("h3s"+i).value&&$("h3g"+i).value)html+='<div class="row"><div><b>'+$("h3s"+i).value+'</b><small>H3 · '+$("h3g"+i).value+'</small></div><span class="status h3">H3</span><b>0</b></div>';
  $("rows").innerHTML=html;planner();
 }
