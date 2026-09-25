@@ -162,21 +162,15 @@ document.body.classList.add("auth-locked");
     if(hash === window.APLUS_PASSWORD_HASH){
       document.body.classList.remove("auth-locked");
       gate.remove();
-      sessionStorage.setItem("aplusPlanningUnlocked","1");
     }else{
       error.textContent = "密码错误，请重新输入。";
       input.select();
     }
   }
 
-  if(sessionStorage.getItem("aplusPlanningUnlocked") === "1"){
-    document.body.classList.remove("auth-locked");
-    gate.remove();
-  }else{
-    button.addEventListener("click", unlock);
-    input.addEventListener("keydown", e => { if(e.key === "Enter") unlock(); });
-    setTimeout(() => input.focus(), 100);
-  }
+  button.addEventListener("click", unlock);
+  input.addEventListener("keydown", e => { if(e.key === "Enter") unlock(); });
+  setTimeout(() => input.focus(), 100);
 })();
 </script>
 
