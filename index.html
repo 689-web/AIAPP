@@ -51,6 +51,75 @@
     box-shadow:0 6px 20px rgba(0,0,0,.08);
   }
   .back-top.show{opacity:1;visibility:visible;transform:translateY(0);}
+  /* Mobile visual polish */
+  @media (max-width:640px){
+    html{scroll-padding-top:108px;}
+    body{font-size:15px;overflow-x:hidden;}
+    .wrap{width:100%;max-width:100%;padding:1rem .9rem 3rem;}
+    .topbar{
+      position:sticky;top:0;margin:-1rem -.9rem .9rem;padding:.55rem .85rem;
+      min-height:48px;gap:.5rem;border-bottom:1px solid #dce5df;
+    }
+    .topbar-title{font-size:.67rem;letter-spacing:.035em;max-width:58%;}
+    .topbar-actions{flex-shrink:0;}
+    .topbar button{min-height:36px;font-size:.72rem;padding:.38rem .68rem;}
+    header.top{margin-bottom:1rem;}
+    h1{font-size:1.72rem;line-height:1.2;margin-bottom:.5rem;}
+    .sub{font-size:.88rem;line-height:1.65;}
+    .note{font-size:.78rem;line-height:1.65;margin-top:.75rem;padding-left:.65rem;}
+    nav.tracks{
+      top:48px;margin:0 -.05rem;padding:0 .15rem;
+      gap:0;border-bottom:1px solid #dce5df;overflow-x:auto;scrollbar-width:none;
+    }
+    nav.tracks::-webkit-scrollbar{display:none;}
+    nav.tracks button{
+      flex:1 0 auto;min-width:0;min-height:46px;font-size:.92rem;
+      padding:.62rem .5rem .68rem;white-space:nowrap;
+    }
+    .track-panel{margin-top:1rem;}
+    .timeline{gap:.65rem;margin-bottom:1rem;}
+    .timeline .stage{padding:.8rem .85rem;border-radius:10px;}
+    .timeline .stage .yr{font-size:.67rem;margin-bottom:.2rem;}
+    .timeline .stage p{font-size:.8rem;line-height:1.6;}
+    .school-switch{
+      gap:.45rem;margin-bottom:1rem;overflow-x:auto;padding:.1rem 0 .3rem;
+      scrollbar-width:none;-webkit-overflow-scrolling:touch;
+    }
+    .school-switch::-webkit-scrollbar{display:none;}
+    .school-switch button{
+      flex:0 0 auto;min-height:40px;font-size:.78rem;padding:.42rem .78rem;
+    }
+    .grid{gap:.7rem;}
+    .card{padding:.9rem .85rem 1rem;border-radius:10px;}
+    .card h2{font-size:1rem;line-height:1.4;margin-bottom:.5rem;align-items:flex-start;}
+    .dot{margin-top:.45rem;width:7px;height:7px;}
+    .tag{font-size:.65rem;padding:.08rem .4rem;margin-left:.2rem;white-space:nowrap;}
+    .card ul{padding-left:1rem;font-size:.82rem;line-height:1.65;}
+    .card li{margin-bottom:.42rem;}
+    .checklist{margin-top:1rem;padding:.9rem .85rem;border-radius:10px;}
+    .checklist h2{font-size:1rem;margin-bottom:.55rem;}
+    .checklist ol{padding-left:1rem;font-size:.82rem;line-height:1.65;}
+    .checklist li{margin-bottom:.4rem;}
+    .calendar-list{gap:.55rem;}
+    .cal-item{grid-template-columns:1fr;gap:.3rem;padding:.8rem .85rem;border-radius:10px;}
+    .cal-item .month{font-size:.75rem;font-weight:700;padding:0;}
+    .cal-item h3{font-size:.86rem;line-height:1.4;margin-bottom:.18rem;}
+    .cal-item p{font-size:.78rem;line-height:1.6;}
+    .cal-tags{margin-bottom:.22rem;}
+    .cal-tag{font-size:.61rem;padding:.07rem .42rem;}
+    footer{margin-top:1.5rem;font-size:.72rem;line-height:1.55;}
+    footer ul{padding-left:1rem;}
+    footer li{margin-bottom:.35rem;}
+    .back-top{right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));width:40px;height:40px;}
+  }
+  @media (max-width:380px){
+    h1{font-size:1.55rem;}
+    .topbar-title{font-size:.61rem;max-width:54%;}
+    .topbar button{font-size:.68rem;padding:.35rem .58rem;}
+    nav.tracks button{font-size:.86rem;padding-left:.38rem;padding-right:.38rem;}
+    .card ul,.checklist ol{font-size:.79rem;}
+    .timeline .stage p,.cal-item p{font-size:.76rem;}
+  }
   @media (max-width:640px){
     .topbar-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .topbar button{font-size:.72rem;padding:.4rem .65rem;}
