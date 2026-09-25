@@ -19,21 +19,10 @@
     padding-bottom:env(safe-area-inset-bottom,0px);
   }
   html{scroll-padding-top:env(safe-area-inset-top,0px);}
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --paper:#243029; --ink:#f7faf8; --ink-soft:#aab7ae;
-      --line:#435149; --card:#2d3831;
-      --med-soft:#34483c; --law-soft:#34483c;
-    }
-  }
-  :root[data-theme="dark"]{
-    --paper:#243029; --ink:#f7faf8; --ink-soft:#aab7ae;
-      --line:#435149; --card:#2d3831;
-      --med-soft:#34483c; --law-soft:#34483c;
-  }
+  /* APlus Achiever calculator theme: force the same light palette */
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
-    background:var(--paper); color:var(--ink);
+    background:#f7faf8; color:#243029;
     font-family:'Inter',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;
     line-height:1.6; -webkit-font-smoothing:antialiased;
   }
@@ -42,14 +31,14 @@
     position:sticky; top:0; z-index:100;
     display:flex; align-items:center; justify-content:space-between; gap:.8rem;
     margin:-2.5rem -1.5rem 1.5rem; padding:.7rem 1.5rem;
-    background:color-mix(in srgb,var(--paper) 92%,transparent);
+    background:rgba(247,250,248,.94);
     border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);
     backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
   }
-  .topbar-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--ink-soft);}
+  .topbar-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#718078;}
   .topbar-actions{display:flex;gap:.45rem;}
   .topbar button,.back-top{
-    border:1px solid var(--line); background:var(--card); color:var(--ink);
+    border:1px solid #dce5df; background:#fff; color:#243029;
     font:600 .76rem 'Inter',sans-serif; border-radius:999px; cursor:pointer;
     min-height:36px; padding:.4rem .75rem; transition:.15s;
   }
@@ -71,21 +60,21 @@
     font-family:'Newsreader',Georgia,serif; font-weight:600;
     font-size:clamp(1.6rem,4vw,2.3rem); letter-spacing:-0.01em; margin-bottom:.4rem;
   }
-  .sub{color:var(--ink-soft); font-size:.98rem; max-width:60ch;}
+  .sub{color:#718078; font-size:.98rem; max-width:60ch;}
   .note{
-    margin-top:1rem; font-size:.85rem; color:var(--ink-soft);
+    margin-top:1rem; font-size:.85rem; color:#718078;
     border-left:3px solid var(--line); padding-left:.8rem;
   }
 
   nav.tracks{
     display:flex; gap:.6rem; margin:1.8rem 0 0; border-bottom:1px solid var(--line);
     position:sticky; top:53px; z-index:80;
-    background:color-mix(in srgb,var(--paper) 94%,transparent);
+    background:rgba(247,250,248,.96);
     backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
   nav.tracks button{
     font-family:'Newsreader',serif; font-size:1.05rem; font-weight:600;
-    background:none; border:none; color:var(--ink-soft); cursor:pointer;
+    background:none; border:none; color:#718078; cursor:pointer;
     padding:.7rem .2rem .9rem; position:relative; transition:color .15s;
   }
   nav.tracks button + button{margin-left:1.4rem;}
@@ -100,11 +89,11 @@
   .calendar-list{display:flex; flex-direction:column; gap:.6rem;}
   .cal-item{
     display:grid; grid-template-columns:96px 1fr; gap:.9rem;
-    padding:.85rem 1rem; background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:.85rem 1rem; background:#fff; border:1px solid #dce5df; border-radius:10px;
   }
-  .cal-item .month{font-family:'Newsreader',serif; font-weight:600; font-size:.88rem; color:var(--ink-soft); padding-top:.1rem;}
+  .cal-item .month{font-family:'Newsreader',serif; font-weight:600; font-size:.88rem; color:#718078; padding-top:.1rem;}
   .cal-item h3{font-size:.95rem; font-weight:600; margin-bottom:.25rem;}
-  .cal-item p{font-size:.85rem; color:var(--ink-soft);}
+  .cal-item p{font-size:.85rem; color:#718078;}
   .cal-tags{display:flex; gap:.35rem; margin-bottom:.35rem; flex-wrap:wrap;}
   .cal-tag{font-size:.68rem; font-weight:700; padding:.08rem .5rem; border-radius:99px;}
   .cal-tag.med{background:#edf4ef;color:#536f5d;} .cal-tag.law{background:#edf4ef;color:#536f5d;}
@@ -121,7 +110,7 @@
   }
   .school-switch button{
     font-family:'Inter',sans-serif; font-size:.85rem; font-weight:600;
-    border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
+    border:1px solid #dce5df; background:var(--card); color:#718078;
     padding:.4rem .9rem; border-radius:99px; cursor:pointer; transition:.15s;
   }
   .school-switch button.active{color:#fff; border-color:transparent;}
@@ -134,14 +123,14 @@
     display:grid; grid-template-columns:repeat(3,1fr); gap:.9rem; margin-bottom:1.6rem;
   }
   .timeline .stage{
-    background:var(--card); border:1px solid var(--line); border-radius:10px; padding:.9rem 1rem;
+    background:#fff; border:1px solid #dce5df; border-radius:10px; padding:.9rem 1rem;
   }
-  .timeline .stage .yr{font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:.3rem;}
+  .timeline .stage .yr{font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:#718078; margin-bottom:.3rem;}
   .timeline .stage p{font-size:.85rem; color:var(--ink);}
 
   .grid{display:grid; grid-template-columns:1fr 1fr; gap:1rem;}
   .card{
-    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    background:#fff; border:1px solid #dce5df; border-radius:12px;
     padding:1.2rem 1.3rem 1.3rem;
   }
   .card h2{
@@ -161,15 +150,15 @@
   #panel-med .tag{background:#edf4ef;color:#536f5d;} #panel-law .tag{background:#edf4ef;color:#536f5d;}
 
   .checklist{
-    margin-top:1.6rem; background:var(--card); border:1px solid var(--line);
+    margin-top:1.6rem; background:#fff; border:1px solid #dce5df;
     border-radius:12px; padding:1.2rem 1.3rem;
   }
   .checklist h2{font-family:'Newsreader',serif; font-size:1.1rem; margin-bottom:.7rem;}
   .checklist ol{padding-left:1.2rem; font-size:.92rem;}
   .checklist li{margin-bottom:.45rem;}
 
-  footer{margin-top:2.2rem; font-size:.82rem; color:var(--ink-soft);}
-  footer a{color:var(--ink-soft);}
+  footer{margin-top:2.2rem; font-size:.82rem; color:#718078;}
+  footer a{color:#718078;}
   footer ul{padding-left:1.1rem; margin-top:.4rem;}
   footer li{margin-bottom:.25rem;}
 
