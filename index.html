@@ -131,6 +131,26 @@
   }
 .uas-btn{display:inline-flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.45rem .85rem;border-radius:999px;background:#718f7a;color:#fff!important;text-decoration:none!important;font-size:.78rem;font-weight:700;transition:.15s;}.uas-btn:hover{background:#536f5d;transform:translateY(-1px);}@media(max-width:640px){.uas-btn{width:100%;min-height:42px;font-size:.8rem;margin-top:.7rem;}}\n
   #passwordGate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:rgba(247,250,248,.98);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
+  #passwordGate .gate-card{max-height:calc(100vh - 2rem);overflow:auto;text-align:left;}
+  #passwordGate .gate-preview{padding-bottom:1rem;border-bottom:1px solid #dce5df;}
+  #passwordGate .gate-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.07em;color:#718078;margin-bottom:.45rem;}
+  #passwordGate .gate-preview h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(1.45rem,4vw,2rem);line-height:1.2;margin:0 0 .55rem;}
+  #passwordGate .gate-sub{font-size:.82rem;line-height:1.65;color:#718078;margin:0 0 .65rem;}
+  #passwordGate .gate-note{font-size:.74rem;line-height:1.65;color:#718078;border-left:3px solid #dce5df;padding-left:.65rem;margin:.5rem 0;}
+  #passwordGate .gate-uas{display:flex;align-items:center;justify-content:center;margin-top:.75rem;min-height:40px;padding:.4rem .8rem;border-radius:999px;background:#718f7a;color:#fff;text-decoration:none;font-size:.76rem;font-weight:700;transition:.15s;}
+  #passwordGate .gate-uas:hover{background:#536f5d;transform:translateY(-1px);}
+  #passwordGate .gate-login{padding-top:1rem;text-align:center;}
+  #passwordGate .gate-login-title{font-family:'Newsreader',Georgia,serif;font-size:1.25rem;font-weight:600;margin-bottom:.25rem;}
+  @media(max-width:640px){
+    #passwordGate{align-items:flex-start;padding:.65rem;}
+    #passwordGate .gate-card{width:min(520px,100%);max-height:calc(100vh - 1.3rem);padding:1rem;border-radius:14px;}
+    #passwordGate .gate-eyebrow{font-size:.65rem;}
+    #passwordGate .gate-preview h1{font-size:1.48rem;}
+    #passwordGate .gate-sub{font-size:.76rem;line-height:1.6;}
+    #passwordGate .gate-note{font-size:.69rem;line-height:1.6;}
+    #passwordGate .gate-uas{min-height:40px;font-size:.75rem;}
+  }
+
   #passwordGate .gate-card{width:min(380px,100%);background:#fff;border:1px solid #dce5df;border-radius:16px;padding:1.5rem;box-shadow:0 18px 60px rgba(36,48,41,.12);text-align:center;}
   #passwordGate h2{font-family:'Newsreader',Georgia,serif;font-size:1.45rem;margin-bottom:.35rem;}
   #passwordGate p{font-size:.84rem;color:#718078;margin-bottom:1rem;}
@@ -144,13 +164,23 @@
 <body class="locked">
 <div id="passwordGate" aria-modal="true" role="dialog" aria-labelledby="gateTitle">
   <div class="gate-card">
-    <h2 id="gateTitle">APlus Achiever</h2>
-    <p>请输入访问密码</p>
-    <form id="passwordForm" autocomplete="off">
-      <input id="passwordInput" type="password" inputmode="numeric" autocomplete="off" aria-label="访问密码" autofocus>
-      <button id="passwordSubmit" type="submit">进入</button>
-      <div id="passwordError" aria-live="polite"></div>
-    </form>
+    <div class="gate-preview">
+      <div class="gate-eyebrow">ADMISSIONS PLANNER · AY2026</div>
+      <h1 id="gateTitle">医科与法律申请规划</h1>
+      <p class="gate-sub">面向新加坡中学 / 初级学院学生的升学辅导参考工具 —— 覆盖学术成绩、背景经验、申请材料与申请流程四大板块,聚焦本地院校(NUS 医学、NTU 医学、NUS 法律、SMU 法律)。</p>
+      <p class="gate-note">内容基于 AY2026 招生资讯整理,细节每年可能调整,正式建议前请以各校官网最新公告为准。</p>
+      <p class="gate-note"><b>A-Level 计分制度更新:</b> 从 AY2026/27 学年入学(即 2025 年 11 月应考、2026 年 2 月放榜的批次)起,MOE 改用 <b>70 分制大学入学分数(UAS)</b>:最佳 3 门 H2(满分 60)+ GP(满分 10),PW 改为及格/不及格制,第四门 H1 或母语可选计入(仅在提高总分时纳入并按比例换算)。</p>
+      <a class="gate-uas" href="https://689-web.github.io/AIAPP/a-level-score-calculator.html" target="_blank" rel="noopener">A-Level UAS 算分器</a>
+    </div>
+    <div class="gate-login">
+      <div class="gate-login-title">APlus Achiever</div>
+      <p>请输入访问密码</p>
+      <form id="passwordForm" autocomplete="off">
+        <input id="passwordInput" type="password" inputmode="numeric" autocomplete="off" aria-label="访问密码" autofocus>
+        <button id="passwordSubmit" type="submit">进入规划工具</button>
+        <div id="passwordError" aria-live="polite"></div>
+      </form>
+    </div>
   </div>
 </div>
 <div class="wrap">
