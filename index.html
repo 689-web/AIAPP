@@ -502,10 +502,12 @@
   const backTop = document.getElementById('backTop');
   const goTop = () => window.scrollTo({top:0, behavior:'smooth'});
   homeBtn.addEventListener('click', goTop);
-  backTop.addEventListener('click', goTop);
-  window.addEventListener('scroll', ()=>{
-    backTop.classList.toggle('show', window.scrollY > 420);
-  }, {passive:true});
+  if(backTop){
+    backTop.addEventListener('click', goTop);
+    window.addEventListener('scroll', ()=>{
+      backTop.classList.toggle('show', window.scrollY > 420);
+    }, {passive:true});
+  }
 
   document.querySelectorAll('nav.tracks button').forEach(btn=>{
     btn.addEventListener('click', ()=>{
