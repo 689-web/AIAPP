@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>十大成就规划模板 | APLUS ACHIEVER</title>
+<style>
+:root{
+  --green:#3f9d5f; --green-deep:#2c7d47; --green-soft:#eaf7ee; --lime:#8ec63f;
+  --bg:#f3faf4; --card:#ffffff; --text:#1c3324; --muted:#6b8577; --line:#dcefe1;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#0d1712; --card:#132420; --text:#e6f3ea; --muted:#8fae9c; --line:#20362c; --green-soft:#132420; }
+}
+:root[data-theme="dark"]{ --bg:#0d1712; --card:#132420; --text:#e6f3ea; --muted:#8fae9c; --line:#20362c; --green-soft:#132420; }
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--text);font-family:"Segoe UI",-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;line-height:1.6;}
+header{background:linear-gradient(160deg,var(--green),var(--green-deep));color:#fff;text-align:center;padding:36px 20px 28px;padding-top:calc(36px + env(safe-area-inset-top,0px));}
+header .en{color:var(--lime);font-weight:800;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;}
+header h1{margin:8px 0 6px;font-size:clamp(20px,4vw,26px);}
+header p{margin:0;color:#e3f5e8;font-size:13.5px;max-width:520px;margin:0 auto;}
+main{max-width:900px;margin:0 auto;padding:24px 16px 60px;}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-bottom:20px;}
+.toolbar button{border:1px solid var(--line);background:var(--card);color:var(--text);padding:9px 16px;border-radius:10px;font-weight:700;font-size:13.5px;cursor:pointer;}
+.toolbar button.primary{background:var(--green);color:#fff;border-color:var(--green);}
+.toolbar button.primary:hover{background:var(--green-deep);}
+.entry{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px 20px;margin-bottom:16px;}
+.entry .num{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:8px;background:var(--green-soft);color:var(--green-deep);font-weight:800;font-size:13px;margin-right:8px;}
+.entry .title{display:flex;align-items:center;font-weight:800;font-size:15px;margin-bottom:12px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:12px;}
+label{font-size:11.5px;font-weight:700;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em;}
+input,select,textarea{width:100%;padding:9px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:14px;font-family:inherit;}
+textarea{resize:vertical;min-height:56px;}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:10px 18px 30px;}
+@media print{
+  header{background:none!important;color:var(--text)!important;}
+  header p{color:var(--muted)!important;}
+  .toolbar{display:none;}
+  .entry{break-inside:avoid;box-shadow:none;}
+  body{background:#fff;}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="en">Medicine Portfolio Prep</div>
+  <h1>十大成就与活动规划模板</h1>
+  <p>近 3–4 年内最重要的 10 项成就 / 活动，参考 NUS / NTU 医学院 Portfolio 官方格式。内容会自动保存在本机浏览器中。</p>
+</header>
+
+<main>
+  <div class="toolbar">
+    <button class="primary" onclick="window.print()">🖨️ 打印 / 存为 PDF</button>
+    <button onclick="resetAll()">🗑️ 清空全部</button>
+  </div>
+
+  <div id="entries"></div>
+</main>
+<footer>APLUS ACHIEVER · Medicine Portfolio Planning Template</footer>
+
+<script>
+const CATEGORIES = ["","Awards 奖项","Sports 体育","School CCA 校内课外活动","Community Involvement 社区参与","Arts & Theatre 艺术与戏剧","Research/Publications 研究/论文","National Service 国民服役"];
+const FIELDS = [
+  {key:"category", label:"类别 Category", type:"select"},
+  {key:"period", label:"起止时间 Period (mm/yy - mm/yy)", type:"text"},
+  {key:"award", label:"奖项/成就名称 Award / Achievement", type:"text"},
+  {key:"role", label:"担任角色/职务 Appointment", type:"text"},
+  {key:"org", label:"所属机构/活动 Organisation / Event", type:"text"},
+];
+const container = document.getElementById('entries');
+const STORAGE_KEY = 'aplus_top10_achievements_v1';
+
+function loadSaved(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }catch(e){ return {}; }
+}
+function saveField(i, key, value){
+  try{
+    const data = loadSaved();
+    data[i] = data[i] || {};
+    data[i][key] = value;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }catch(e){ /* storage unavailable, ignore */ }
+}
+
+function buildEntry(i){
+  const saved = loadSaved()[i] || {};
+  const wrap = document.createElement('div');
+  wrap.className = 'entry';
+
+  const title = document.createElement('div');
+  title.className = 'title';
+  title.innerHTML = `<span class="num">${i+1}</span> 第 ${i+1} 项成就 / 活动`;
+  wrap.appendChild(title);
+
+  const grid = document.createElement('div');
+  grid.className = 'grid';
+  FIELDS.forEach(f=>{
+    const cell = document.createElement('div');
+    const lab = document.createElement('label');
+    lab.textContent = f.label;
+    cell.appendChild(lab);
+    let input;
+    if(f.type==='select'){
+      input = document.createElement('select');
+      CATEGORIES.forEach(c=>{
+        const opt = document.createElement('option');
+        opt.value = c; opt.textContent = c || '请选择...';
+        input.appendChild(opt);
+      });
+    } else {
+      input = document.createElement('input');
+      input.type = 'text';
+    }
+    input.value = saved[f.key] || '';
+    input.addEventListener('input', ()=> saveField(i, f.key, input.value));
+    input.addEventListener('change', ()=> saveField(i, f.key, input.value));
+    cell.appendChild(input);
+    grid.appendChild(cell);
+  });
+  wrap.appendChild(grid);
+
+  const reflCell = document.createElement('div');
+  const reflLab = document.createElement('label');
+  reflLab.textContent = '这项经历如何体现你想学医的动机 (面试会追问)';
+  reflCell.appendChild(reflLab);
+  const textarea = document.createElement('textarea');
+  textarea.value = saved.reflection || '';
+  textarea.addEventListener('input', ()=> saveField(i,'reflection', textarea.value));
+  reflCell.appendChild(textarea);
+  wrap.appendChild(reflCell);
+
+  return wrap;
+}
+
+function render(){
+  container.innerHTML = '';
+  for(let i=0;i<10;i++){ container.appendChild(buildEntry(i)); }
+}
+
+function resetAll(){
+  if(!confirm('确定要清空全部 10 项内容吗？此操作无法撤销。')) return;
+  try{ localStorage.removeItem(STORAGE_KEY); }catch(e){}
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
