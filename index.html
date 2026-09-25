@@ -8,278 +8,125 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600;6..72,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --paper:#f7faf8; --ink:#243029; --ink-soft:#718078;
-    --line:#dce5df;
-    --med:#718f7a; --med-soft:#edf4ef;
-    --law:#718f7a; --law-soft:#edf4ef;
-    --card:#FFFFFF;
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-  html{scroll-padding-top:env(safe-area-inset-top,0px);}
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:#f7faf8;color:#243029;font-family:'Inter',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased;}
-  .wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
-  .topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:-2.5rem -1.5rem 1.5rem;padding:.7rem 1.5rem;background:rgba(247,250,248,.94);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-  .topbar-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#718078;}
-  .topbar-actions{display:flex;gap:.45rem;}
-  .topbar button,.back-top{border:1px solid #dce5df;background:#fff;color:#243029;font:600 .76rem 'Inter',sans-serif;border-radius:999px;cursor:pointer;min-height:36px;padding:.4rem .75rem;transition:.15s;}
-  .topbar button:hover,.back-top:hover{transform:translateY(-1px);border-color:#718f7a;color:#536f5d;}
-  .back-top{position:fixed;right:1.2rem;bottom:1.2rem;z-index:90;width:42px;height:42px;padding:0;display:grid;place-items:center;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,visibility .2s,transform .2s;box-shadow:0 6px 20px rgba(0,0,0,.08);}
-  .back-top.show{opacity:1;visibility:visible;transform:translateY(0);}
-  header.top{margin-bottom:1.8rem;}
-  h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-0.01em;margin-bottom:.4rem;}
-  .sub{color:#718078;font-size:.98rem;max-width:60ch;}
-  .note{margin-top:1rem;font-size:.85rem;color:#718078;border-left:3px solid var(--line);padding-left:.8rem;}
-  nav.tracks{display:flex;gap:.6rem;margin:1.8rem 0 0;border-bottom:1px solid var(--line);position:sticky;top:53px;z-index:80;background:rgba(247,250,248,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
-  nav.tracks button{font-family:'Newsreader',serif;font-size:1.05rem;font-weight:600;background:none;border:none;color:#718078;cursor:pointer;padding:.7rem .2rem .9rem;position:relative;transition:color .15s;}
-  nav.tracks button + button{margin-left:1.4rem;}
-  nav.tracks button.active{color:var(--ink);}
-  nav.tracks button.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#718f7a;}
-  .calendar-list{display:flex;flex-direction:column;gap:.6rem;}
-  .cal-item{display:grid;grid-template-columns:96px 1fr;gap:.9rem;padding:.85rem 1rem;background:#fff;border:1px solid #dce5df;border-radius:10px;}
-  .cal-item .month{font-family:'Newsreader',serif;font-weight:600;font-size:.88rem;color:#718078;padding-top:.1rem;}
-  .cal-item h3{font-size:.95rem;font-weight:600;margin-bottom:.25rem;}
-  .cal-item p{font-size:.85rem;color:#718078;}
-  .cal-tags{display:flex;gap:.35rem;margin-bottom:.35rem;flex-wrap:wrap;}
-  .cal-tag{font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:99px;}
-  .cal-tag.med,.cal-tag.law{background:#edf4ef;color:#536f5d;}
-  .track-panel{display:none;margin-top:1.8rem;}
-  .track-panel.active{display:block;}
-  .school-switch{display:flex;gap:.5rem;margin-bottom:1.4rem;}
-  .school-switch button{font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;border:1px solid #dce5df;background:var(--card);color:#718078;padding:.4rem .9rem;border-radius:99px;cursor:pointer;transition:.15s;}
-  .school-switch button.active{color:#fff;border-color:transparent;background:#718f7a;}
-  .school-panel{display:none;}
-  .school-panel.active{display:block;}
-  .timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.6rem;}
-  .timeline .stage{background:#fff;border:1px solid #dce5df;border-radius:10px;padding:.9rem 1rem;}
-  .timeline .stage .yr{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:#718078;margin-bottom:.3rem;}
-  .timeline .stage p{font-size:.85rem;color:var(--ink);}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
-  .card{background:#fff;border:1px solid #dce5df;border-radius:12px;padding:1.2rem 1.3rem 1.3rem;}
-  .card h2{font-family:'Newsreader',serif;font-size:1.15rem;font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;}
-  .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#718f7a;}
-  .card ul{padding-left:1.15rem;font-size:.92rem;}
-  .card li{margin-bottom:.5rem;}
-  .card li:last-child{margin-bottom:0;}
-  .card b{font-weight:600;}
-  .tag{display:inline-block;font-size:.72rem;padding:.1rem .5rem;border-radius:99px;margin-left:.4rem;vertical-align:middle;font-weight:600;background:#edf4ef;color:#536f5d;}
-  .checklist{margin-top:1.6rem;background:#fff;border:1px solid #dce5df;border-radius:12px;padding:1.2rem 1.3rem;}
-  .checklist h2{font-family:'Newsreader',serif;font-size:1.1rem;margin-bottom:.7rem;}
-  .checklist ol{padding-left:1.2rem;font-size:.92rem;}
-  .checklist li{margin-bottom:.45rem;}
-  footer{margin-top:2.2rem;font-size:.82rem;color:#718078;}
-  footer a{color:#718078;}
-  footer ul{padding-left:1.1rem;margin-top:.4rem;}
-  footer li{margin-bottom:.25rem;}
-  @media (max-width:640px){
-    html{scroll-padding-top:108px;}
-    body{font-size:15px;overflow-x:hidden;}
-    .wrap{width:100%;max-width:100%;padding:1rem .9rem 3rem;}
-    .topbar{position:sticky;top:0;margin:-1rem -.9rem .9rem;padding:.55rem .85rem;min-height:48px;gap:.5rem;border-bottom:1px solid #dce5df;}
-    .topbar-title{font-size:.67rem;letter-spacing:.035em;max-width:58%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .topbar-actions{flex-shrink:0;}
-    .topbar button{min-height:36px;font-size:.72rem;padding:.4rem .65rem;}
-    header.top{margin-bottom:1rem;}
-    h1{font-size:1.72rem;line-height:1.2;margin-bottom:.5rem;}
-    .sub{font-size:.88rem;line-height:1.65;}
-    .note{font-size:.78rem;line-height:1.65;margin-top:.75rem;padding-left:.65rem;}
-    nav.tracks{top:48px;margin:0 -.05rem;padding:0 .15rem;gap:0;border-bottom:1px solid #dce5df;overflow-x:auto;scrollbar-width:none;}
-    nav.tracks::-webkit-scrollbar{display:none;}
-    nav.tracks button{flex:1 0 auto;min-width:0;min-height:46px;font-size:.92rem;padding:.62rem .5rem .68rem;white-space:nowrap;}
-    nav.tracks button + button{margin-left:0;}
-    .track-panel{margin-top:1rem;}
-    .timeline{gap:.65rem;margin-bottom:1rem;grid-template-columns:1fr;}
-    .timeline .stage{padding:.8rem .85rem;border-radius:10px;}
-    .timeline .stage .yr{font-size:.67rem;margin-bottom:.2rem;}
-    .timeline .stage p{font-size:.8rem;line-height:1.6;}
-    .school-switch{gap:.45rem;margin-bottom:1rem;overflow-x:auto;padding:.1rem 0 .3rem;scrollbar-width:none;-webkit-overflow-scrolling:touch;}
-    .school-switch::-webkit-scrollbar{display:none;}
-    .school-switch button{flex:0 0 auto;min-height:40px;font-size:.78rem;padding:.42rem .78rem;white-space:nowrap;}
-    .grid{grid-template-columns:1fr;gap:.7rem;}
-    .card{padding:.9rem .85rem 1rem;border-radius:10px;}
-    .card h2{font-size:1rem;line-height:1.4;margin-bottom:.5rem;align-items:flex-start;}
-    .dot{margin-top:.45rem;width:7px;height:7px;}
-    .tag{font-size:.65rem;padding:.08rem .4rem;margin-left:.2rem;white-space:nowrap;}
-    .card ul{padding-left:1rem;font-size:.82rem;line-height:1.65;}
-    .card li{margin-bottom:.42rem;}
-    .checklist{margin-top:1rem;padding:.9rem .85rem;border-radius:10px;}
-    .checklist h2{font-size:1rem;margin-bottom:.55rem;}
-    .checklist ol{padding-left:1rem;font-size:.82rem;line-height:1.65;}
-    .checklist li{margin-bottom:.4rem;}
-    .calendar-list{gap:.55rem;}
-    .cal-item{grid-template-columns:1fr;gap:.3rem;padding:.8rem .85rem;border-radius:10px;}
-    .cal-item .month{font-size:.75rem;font-weight:700;padding:0;}
-    .cal-item h3{font-size:.86rem;line-height:1.4;margin-bottom:.18rem;}
-    .cal-item p{font-size:.78rem;line-height:1.6;}
-    .cal-tags{margin-bottom:.22rem;}
-    .cal-tag{font-size:.61rem;padding:.07rem .42rem;}
-    footer{margin-top:1.5rem;font-size:.72rem;line-height:1.55;}
-    footer ul{padding-left:1rem;}
-    footer li{margin-bottom:.35rem;}
-    .back-top{right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));width:40px;height:40px;}
-  }
-  @media (max-width:380px){
-    h1{font-size:1.55rem;}
-    .topbar-title{font-size:.61rem;max-width:54%;}
-    .topbar button{font-size:.68rem;padding:.35rem .58rem;}
-    nav.tracks button{font-size:.86rem;padding-left:.38rem;padding-right:.38rem;}
-    .card ul,.checklist ol{font-size:.79rem;}
-    .timeline .stage p,.cal-item p{font-size:.76rem;}
-  }
-.uas-btn{display:inline-flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.45rem .85rem;border-radius:999px;background:#718f7a;color:#fff!important;text-decoration:none!important;font-size:.78rem;font-weight:700;transition:.15s;}.uas-btn:hover{background:#536f5d;transform:translateY(-1px);}@media(max-width:640px){.uas-btn{width:100%;min-height:42px;font-size:.8rem;margin-top:.7rem;}}\n
-  #passwordGate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:rgba(247,250,248,.98);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);}
-  #passwordGate .gate-card{max-height:calc(100vh - 2rem);overflow:auto;text-align:left;}
-  #passwordGate .gate-preview{padding-bottom:1rem;border-bottom:1px solid #dce5df;}
-  #passwordGate .gate-eyebrow{font-size:.72rem;font-weight:700;letter-spacing:.07em;color:#718078;margin-bottom:.45rem;}
-  #passwordGate .gate-preview h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(1.45rem,4vw,2rem);line-height:1.2;margin:0 0 .55rem;}
-  #passwordGate .gate-sub{font-size:.82rem;line-height:1.65;color:#718078;margin:0 0 .65rem;}
-  #passwordGate .gate-note{font-size:.74rem;line-height:1.65;color:#718078;border-left:3px solid #dce5df;padding-left:.65rem;margin:.5rem 0;}
-  #passwordGate .gate-uas{display:flex;align-items:center;justify-content:center;margin-top:.75rem;min-height:40px;padding:.4rem .8rem;border-radius:999px;background:#718f7a;color:#fff;text-decoration:none;font-size:.76rem;font-weight:700;transition:.15s;}
-  #passwordGate .gate-uas:hover{background:#536f5d;transform:translateY(-1px);}
-  #passwordGate .gate-login{padding-top:1rem;text-align:center;}
-  #passwordGate .gate-login-title{font-family:'Newsreader',Georgia,serif;font-size:1.25rem;font-weight:600;margin-bottom:.25rem;}
-  @media(max-width:640px){
-    #passwordGate{align-items:flex-start;padding:.65rem;}
-    #passwordGate .gate-card{width:min(520px,100%);max-height:calc(100vh - 1.3rem);padding:1rem;border-radius:14px;}
-    #passwordGate .gate-eyebrow{font-size:.65rem;}
-    #passwordGate .gate-preview h1{font-size:1.48rem;}
-    #passwordGate .gate-sub{font-size:.76rem;line-height:1.6;}
-    #passwordGate .gate-note{font-size:.69rem;line-height:1.6;}
-    #passwordGate .gate-uas{min-height:40px;font-size:.75rem;}
-  }
-
-  #passwordGate .gate-card{width:min(380px,100%);background:#fff;border:1px solid #dce5df;border-radius:16px;padding:1.5rem;box-shadow:0 18px 60px rgba(36,48,41,.12);text-align:center;}
-  #passwordGate h2{font-family:'Newsreader',Georgia,serif;font-size:1.45rem;margin-bottom:.35rem;}
-  #passwordGate p{font-size:.84rem;color:#718078;margin-bottom:1rem;}
-  #passwordInput{width:100%;height:44px;border:1px solid #dce5df;border-radius:10px;padding:0 .85rem;font:500 16px 'Inter',sans-serif;outline:none;}
-  #passwordInput:focus{border-color:#718f7a;box-shadow:0 0 0 3px #edf4ef;}
-  #passwordSubmit{width:100%;height:44px;margin-top:.7rem;border:0;border-radius:10px;background:#718f7a;color:#fff;font:700 .86rem 'Inter',sans-serif;cursor:pointer;}
-  #passwordError{min-height:1.25rem;margin:.55rem 0 0;color:#b34b4b;font-size:.78rem;}
-  body.locked{overflow:hidden;}
+:root{--paper:#f7faf8;--ink:#243029;--ink-soft:#718078;--line:#dce5df;--med:#718f7a;--med-soft:#edf4ef;--law:#718f7a;--law-soft:#edf4ef;--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}*{margin:0;padding:0;box-sizing:border-box}
+body{background:#f7faf8;color:#243029;font-family:'Inter',system-ui,-apple-system,'PingFang SC','Microsoft YaHei',sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+body.locked{overflow:hidden}
+.wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.5rem 4rem}
+.topbar{position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;gap:.8rem;margin:-2.5rem -1.5rem 1.5rem;padding:.7rem 1.5rem;background:rgba(247,250,248,.94);border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.topbar-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:#718078}.topbar-actions{display:flex;gap:.45rem}
+.topbar button,.back-top{border:1px solid #dce5df;background:#fff;color:#243029;font:600 .76rem 'Inter',sans-serif;border-radius:999px;cursor:pointer;min-height:36px;padding:.4rem .75rem;transition:.15s}
+.topbar button:hover,.back-top:hover{transform:translateY(-1px);border-color:#718f7a;color:#536f5d}
+.back-top{position:fixed;right:1.2rem;bottom:1.2rem;z-index:90;width:42px;height:42px;padding:0;display:grid;place-items:center;opacity:0;visibility:hidden;transform:translateY(8px);transition:opacity .2s,visibility .2s,transform .2s;box-shadow:0 6px 20px rgba(0,0,0,.08)}
+.back-top.show{opacity:1;visibility:visible;transform:translateY(0)}
+header.top{margin-bottom:1.8rem}h1{font-family:'Newsreader',Georgia,serif;font-weight:600;font-size:clamp(1.6rem,4vw,2.3rem);letter-spacing:-.01em;margin-bottom:.4rem}.sub{color:#718078;font-size:.98rem;max-width:60ch}.note{margin-top:1rem;font-size:.85rem;color:#718078;border-left:3px solid var(--line);padding-left:.8rem}
+nav.tracks{display:flex;gap:.6rem;margin:1.8rem 0 0;border-bottom:1px solid var(--line);position:sticky;top:53px;z-index:80;background:rgba(247,250,248,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+nav.tracks button{font-family:'Newsreader',serif;font-size:1.05rem;font-weight:600;background:none;border:none;color:#718078;cursor:pointer;padding:.7rem .2rem .9rem;position:relative;transition:color .15s}nav.tracks button+button{margin-left:1.4rem}nav.tracks button.active{color:var(--ink)}nav.tracks button.active::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:#718f7a}
+.calendar-list{display:flex;flex-direction:column;gap:.6rem}.cal-item{display:grid;grid-template-columns:96px 1fr;gap:.9rem;padding:.85rem 1rem;background:#fff;border:1px solid #dce5df;border-radius:10px}.cal-item .month{font-family:'Newsreader',serif;font-weight:600;font-size:.88rem;color:#718078;padding-top:.1rem}.cal-item h3{font-size:.95rem;font-weight:600;margin-bottom:.25rem}.cal-item p{font-size:.85rem;color:#718078}.cal-tags{display:flex;gap:.35rem;margin-bottom:.35rem;flex-wrap:wrap}.cal-tag{font-size:.68rem;font-weight:700;padding:.08rem .5rem;border-radius:99px}.cal-tag.med,.cal-tag.law{background:#edf4ef;color:#536f5d}
+.track-panel{display:none;margin-top:1.8rem}.track-panel.active{display:block}.school-switch{display:flex;gap:.5rem;margin-bottom:1.4rem}.school-switch button{font-family:'Inter',sans-serif;font-size:.85rem;font-weight:600;border:1px solid #dce5df;background:var(--card);color:#718078;padding:.4rem .9rem;border-radius:99px;cursor:pointer;transition:.15s}.school-switch button.active{color:#fff;border-color:transparent;background:#718f7a}.school-panel{display:none}.school-panel.active{display:block}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;margin-bottom:1.6rem}.timeline .stage{background:#fff;border:1px solid #dce5df;border-radius:10px;padding:.9rem 1rem}.timeline .stage .yr{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:#718078;margin-bottom:.3rem}.timeline .stage p{font-size:.85rem;color:var(--ink)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.card{background:#fff;border:1px solid #dce5df;border-radius:12px;padding:1.2rem 1.3rem 1.3rem}.card h2{font-family:'Newsreader',serif;font-size:1.15rem;font-weight:600;margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem}.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;background:#718f7a}.card ul{padding-left:1.15rem;font-size:.92rem}.card li{margin-bottom:.5rem}.card li:last-child{margin-bottom:0}.card b{font-weight:600}.tag{display:inline-block;font-size:.72rem;padding:.1rem .5rem;border-radius:99px;margin-left:.4rem;vertical-align:middle;font-weight:600;background:#edf4ef;color:#536f5d}.checklist{margin-top:1.6rem;background:#fff;border:1px solid #dce5df;border-radius:12px;padding:1.2rem 1.3rem}.checklist h2{font-family:'Newsreader',serif;font-size:1.1rem;margin-bottom:.7rem}.checklist ol{padding-left:1.2rem;font-size:.92rem}.checklist li{margin-bottom:.45rem}footer{margin-top:2.2rem;font-size:.82rem;color:#718078}footer a{color:#718078}footer ul{padding-left:1.1rem;margin-top:.4rem}footer li{margin-bottom:.25rem}
+@media(max-width:640px){html{scroll-padding-top:108px}body{font-size:15px;overflow-x:hidden}.wrap{width:100%;max-width:100%;padding:1rem .9rem 3rem}.topbar{position:sticky;top:0;margin:-1rem -.9rem .9rem;padding:.55rem .85rem;min-height:48px;gap:.5rem;border-bottom:1px solid #dce5df}.topbar-title{font-size:.67rem;letter-spacing:.035em;max-width:58%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.topbar-actions{flex-shrink:0}.topbar button{min-height:36px;font-size:.72rem;padding:.4rem .65rem}header.top{margin-bottom:1rem}h1{font-size:1.72rem;line-height:1.2;margin-bottom:.5rem}.sub{font-size:.88rem;line-height:1.65}.note{font-size:.78rem;line-height:1.65;margin-top:.75rem;padding-left:.65rem}nav.tracks{top:48px;margin:0 -.05rem;padding:0 .15rem;gap:0;border-bottom:1px solid #dce5df;overflow-x:auto;scrollbar-width:none}nav.tracks::-webkit-scrollbar{display:none}nav.tracks button{flex:1 0 auto;min-width:0;min-height:46px;font-size:.92rem;padding:.62rem .5rem .68rem;white-space:nowrap}nav.tracks button+button{margin-left:0}.track-panel{margin-top:1rem}.timeline{gap:.65rem;margin-bottom:1rem;grid-template-columns:1fr}.timeline .stage{padding:.8rem .85rem;border-radius:10px}.timeline .stage .yr{font-size:.67rem;margin-bottom:.2rem}.timeline .stage p{font-size:.8rem;line-height:1.6}.school-switch{gap:.45rem;margin-bottom:1rem;overflow-x:auto;padding:.1rem 0 .3rem;scrollbar-width:none;-webkit-overflow-scrolling:touch}.school-switch::-webkit-scrollbar{display:none}.school-switch button{flex:0 0 auto;min-height:40px;font-size:.78rem;padding:.42rem .78rem;white-space:nowrap}.grid{grid-template-columns:1fr;gap:.7rem}.card{padding:.9rem .85rem 1rem;border-radius:10px}.card h2{font-size:1rem;line-height:1.4;margin-bottom:.5rem;align-items:flex-start}.dot{margin-top:.45rem;width:7px;height:7px}.tag{font-size:.65rem;padding:.08rem .4rem;margin-left:.2rem;white-space:nowrap}.card ul{padding-left:1rem;font-size:.82rem;line-height:1.65}.card li{margin-bottom:.42rem}.checklist{margin-top:1rem;padding:.9rem .85rem;border-radius:10px}.checklist h2{font-size:1rem;margin-bottom:.55rem}.checklist ol{padding-left:1rem;font-size:.82rem;line-height:1.65}.checklist li{margin-bottom:.4rem}.calendar-list{gap:.55rem}.cal-item{grid-template-columns:1fr;gap:.3rem;padding:.8rem .85rem;border-radius:10px}.cal-item .month{font-size:.75rem;font-weight:700;padding:0}.cal-item h3{font-size:.86rem;line-height:1.4;margin-bottom:.18rem}.cal-item p{font-size:.78rem;line-height:1.6}.cal-tags{margin-bottom:.22rem}.cal-tag{font-size:.61rem;padding:.07rem .42rem}footer{margin-top:1.5rem;font-size:.72rem;line-height:1.55}footer ul{padding-left:1rem}footer li{margin-bottom:.35rem}.back-top{right:.75rem;bottom:calc(.75rem + env(safe-area-inset-bottom,0px));width:40px;height:40px}}
+@media(max-width:380px){h1{font-size:1.55rem}.topbar-title{font-size:.61rem;max-width:54%}.topbar button{font-size:.68rem;padding:.35rem .58rem}nav.tracks button{font-size:.86rem;padding-left:.38rem;padding-right:.38rem}.card ul,.checklist ol{font-size:.79rem}.timeline .stage p,.cal-item p{font-size:.76rem}}
+.uas-btn{display:inline-flex;align-items:center;justify-content:center;margin-top:.75rem;padding:.45rem .85rem;border-radius:999px;background:#718f7a;color:#fff!important;text-decoration:none!important;font-size:.78rem;font-weight:700;transition:.15s}.uas-btn:hover{background:#536f5d;transform:translateY(-1px)}@media(max-width:640px){.uas-btn{width:100%;min-height:42px;font-size:.8rem;margin-top:.7rem}}
+/* Password gate: the page itself is hidden until authentication succeeds. */
+#passwordGate{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;padding:1.2rem;background:#f7faf8;isolation:isolate}
+#passwordGate .gate-card{width:min(380px,100%);background:#fff;border:1px solid #dce5df;border-radius:16px;padding:1.5rem;box-shadow:0 18px 60px rgba(36,48,41,.12);text-align:center}
+#passwordGate h2{font-family:'Newsreader',Georgia,serif;font-size:1.45rem;margin-bottom:.35rem}
+#passwordGate p{font-size:.84rem;color:#718078;margin-bottom:1rem}
+#passwordInput{width:100%;height:44px;border:1px solid #dce5df;border-radius:10px;padding:0 .85rem;font:500 16px 'Inter',sans-serif;outline:none}
+#passwordInput:focus{border-color:#718f7a;box-shadow:0 0 0 3px #edf4ef}
+#passwordSubmit{width:100%;height:44px;margin-top:.7rem;border:0;border-radius:10px;background:#718f7a;color:#fff;font:700 .86rem 'Inter',sans-serif;cursor:pointer}
+#passwordError{min-height:1.25rem;margin:.55rem 0 0;color:#b34b4b;font-size:.78rem}
+body.locked>.wrap{display:none!important}
+body.locked>#passwordGate{display:flex!important}
+@media(max-width:640px){#passwordGate{padding:.65rem}#passwordGate .gate-card{width:min(380px,100%);padding:1rem;border-radius:14px}}
 </style>
 </head>
 <body class="locked">
 <div id="passwordGate" aria-modal="true" role="dialog" aria-labelledby="gateTitle">
-  <div class="gate-card">
-    <h2 id="gateTitle">APlus Achiever</h2>
-    <p>请输入访问密码</p>
-    <form id="passwordForm" autocomplete="off">
-      <input id="passwordInput" type="password" inputmode="numeric" autocomplete="off" aria-label="访问密码" autofocus>
-      <button id="passwordSubmit" type="submit">进入</button>
-      <div id="passwordError" aria-live="polite"></div>
-    </form>
-  </div>
+<div class="gate-card">
+<h2 id="gateTitle">APlus Achiever</h2>
+<p>请输入访问密码</p>
+<form id="passwordForm" autocomplete="off">
+<input id="passwordInput" type="password" inputmode="numeric" autocomplete="off" aria-label="访问密码" autofocus>
+<button id="passwordSubmit" type="submit">进入</button>
+<div id="passwordError" aria-live="polite"></div>
+</form>
+</div>
 </div>
 <div class="wrap">
-  <div class="topbar">
-    <div class="topbar-title">ADMISSIONS PLANNER · AY2026</div>
-    <div class="topbar-actions"><button type="button" id="homeBtn" aria-label="回到顶部">顶部</button></div>
-    <button type="button" class="back-top" id="backTop" aria-label="回到顶部" title="回到顶部">↑</button>
-  </div>
+  <div class="topbar"><div class="topbar-title">ADMISSIONS PLANNER · AY2026</div><div class="topbar-actions"><button type="button" id="homeBtn" aria-label="回到顶部">顶部</button></div><button type="button" class="back-top" id="backTop" aria-label="回到顶部" title="回到顶部">↑</button></div>
   <header class="top">
     <h1>医科与法律申请规划</h1>
     <p class="sub">面向新加坡中学 / 初级学院学生的升学辅导参考工具 —— 覆盖学术成绩、背景经验、申请材料与申请流程四大板块,聚焦本地院校(NUS 医学、NTU 医学、NUS 法律、SMU 法律)。</p>
     <p class="note">内容基于 AY2026 招生资讯整理,细节每年可能调整,正式建议前请以各校官网最新公告为准。</p>
     <p class="note"><b>A-Level 计分制度更新:</b> 从 AY2026/27 学年入学(即 2025 年 11 月应考、2026 年 2 月放榜的批次)起,MOE 改用 <b>70 分制大学入学分数(UAS)</b>:最佳 3 门 H2(满分 60)+ GP(满分 10),PW 改为及格/不及格制,第四门 H1 或母语可选计入(仅在提高总分时纳入并按比例换算)。 <a class="uas-btn" href="https://689-web.github.io/AIAPP/a-level-score-calculator.html">A-Level UAS 算分器</a></p>
   </header>
-  <nav class="tracks" role="tablist" aria-label="申请方向">
-    <button class="active" data-track="med" role="tab" aria-selected="true" aria-controls="panel-med">医科</button>
-    <button data-track="law" role="tab" aria-selected="false" aria-controls="panel-law">法律</button>
-    <button data-track="cal" role="tab" aria-selected="false" aria-controls="panel-cal">关键时间窗口</button>
-  </nav>
+  <nav class="tracks" role="tablist" aria-label="申请方向"><button class="active" data-track="med" role="tab" aria-selected="true" aria-controls="panel-med">医科</button><button data-track="law" role="tab" aria-selected="false" aria-controls="panel-law">法律</button><button data-track="cal" role="tab" aria-selected="false" aria-controls="panel-cal">关键时间窗口</button></nav>
   <section class="track-panel active" id="panel-med">
-    <div class="timeline">
-      <div class="stage"><div class="yr">中三 · 中四</div><p>接触医疗相关志愿服务、参加科学类 CCA,开始记录活动与感悟,为"过去四年经历"打基础。</p></div>
-      <div class="stage"><div class="yr">JC1</div><p>确认 H2 化学 + 生物/物理组合;安排医院见习或长期义工;留意 FSA/SJT、UCAT 等评估形式。</p></div>
-      <div class="stage"><div class="yr">JC2</div><p>整理"十大成就与经历"清单,准备个人陈述草稿;A-Level 后按学校时间线完成网申、评估与面试。<b>NTU 申请者的 UCAT 窗口通常在当年 7–9 月,报名/预约截止日一般在 9 月中旬</b>,早于 A-Level 放榜 —— 务必提前一年规划,切勿等到成绩公布后才准备。</p></div>
-    </div>
-    <div class="school-switch" role="tablist" aria-label="医学院校">
-      <button class="active" data-school="nus" role="tab" aria-selected="true" aria-controls="school-nus">NUS 医学(YLLSoM)</button>
-      <button data-school="ntu" role="tab" aria-selected="false" aria-controls="school-ntu">NTU 医学(LKCMedicine)</button>
-    </div>
-    <div class="school-panel active" id="school-nus"><div class="grid">
-      <div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul>
-        <li>科目组合:<b>H2 化学</b> 必修,另需 H2 生物<b>或</b>物理。</li><li>Major CAP 化学 ≥2.0,生物/物理(择一)≥2.0;另一门主科及 GP、专题作业(PW)CAP 均需 ≥1.0。</li><li>自 AY2026 起,<b>PW 须获及格</b>方符合申请资格;H2 知识与探究(KI)不再能替代 GP。</li><li><b>最新 IGP</b>(2026年1月发布,对应上一批 AY2025/26 录取生):A-Level 10th–90th 百分位<b>均为 AAA/A</b>;当年录取名额约 <b>286 人</b>。</li><li>国际生 / IB 预估成绩者,通常另需 UCAT 或 SAT+AP 作为补充资格;本地 A-Level / 理工学院文凭申请者<b>无需</b>标准化测试。</li>
-      </ul></div>
-      <div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li>医疗相关经历:医院/诊所见习(attachment)、长期性(而非一次性)医疗义工。</li><li>CCA / CIP 中的<b>领导岗位</b>与持续投入,比参与广度更受重视。</li><li>需准备"过去四年最具代表性的十项成就与活动"清单,体现从医动机的连贯性。</li><li>2026 年起改用 <b>FSA</b>(专项技能评估,含 MMI 多站面试,考察同理心、沟通、团队合作与伦理判断);原情境判断测试(SJT)已取消。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述</b>(约 500 字):清晰交代从医动机、个人历程与适配理由,呼应学校"病患照护、科研"等办学理念。</li><li>官方<b>学校推荐信</b>(School Testimonial)+ 两封学术或专业推荐信。</li><li>申请途径分两类:<b>Standard Scheme</b>(以学术表现筛选)或 <b>ABAS/EBAS</b>(面向有突出非学术成就的申请者,注意提交截止日通常更早)。</li><li>提前熟悉 MMI 常见题型,避免临场首次接触。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>通过 NUS 招生办网申系统提交;医学须为<b>第一或第二志愿</b>(若为第二志愿,第一志愿须是需要面试/测试的课程)。</li><li>筛选一般在<b>三月最后一周</b>进行;通过者需完成 FSA 评估。</li><li>录取规模约 280 人/年,是本地两所医学院中名额较多的一所。</li><li>建议提前一学年梳理时间线,避免与其他志愿科目的面试时间冲突。</li></ul></div>
-    </div></div>
-    <div class="school-panel" id="school-ntu"><div class="grid">
-      <div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul><li>科目组合:<b>H2 化学</b> 良好通过,另需 H2 生物<b>或</b>物理良好通过。</li><li><b>最新 IGP</b>:A-Level 10th–90th 百分位<b>均为 AAA/A</b>(RP 估算至少 87.5),当年录取名额约 <b>160 人</b>。</li><li>理工学院申请者:GPA 通常需 3.7 以上,且以健康科学相关专业更具优势。</li><li>IB 申请者参考区间约 42–45 分,需 HL 化学 + HL 生物或物理良好通过。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li><b>UCAT 对所有申请者均为强制要求</b>,无本地/国际生之分 —— 这是与 NUS 医学最大的差异点。</li><li>UCAT 自 2025 年应考起<b>取消了"抽象推理"子项</b>,现由言语推理、决策判断、数量推理三个认知子项构成,每项 300–900 分,<b>总分满分改为 2700 分</b>(旧制满分 3600 分,两者不可直接换算)。情境判断测试(SJT)另按 1–4 级评定,不计入总分。</li><li>NTU 官方尚未公布新 2700 分制下的 10th/90th 百分位录取基准分;此前满分 3600 分制的旧基准数字(如 2720/3130)已不适用于 2025 年之后应考的成绩,规划时不应再直接参照。</li><li><b>时间紧迫提醒</b>:UCAT 2026(对应申请 AY2027–28 学年入学,即现届 JC2 学生 2026 年 11 月 A-Level 后申请的批次)测试窗口为 <b>7 月 13 日至 9 月 24 日</b>,账号注册与预约已于 <b>9 月 16 日截止</b>。尚未应考的现届 JC2 学生,将无法以本届 UCAT 成绩申请 AY2027–28 入学,需改考 UCAT 2027(对应 AY2028–29 入学)或调整申请规划。</li><li>同样重视医疗义工、CCA 领导经历,并在面试中考察团队合作与领导力特质。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述仅 300 字</b>(比 NUS 的 500 字更精炼),需直接点出领导力与团队合作等校方看重的特质。</li><li>两份在线推荐表,其中一份须来自<b>公民与道德教育(Civics)导师/班主任</b>。</li><li>若申请 <b>ABAS</b>(能力本位招生计划),须额外提交课外成就论述及 1–2 位评估人的在线评价表。</li><li>UCAT 需提前 3–6 个月备考,题型与常规考试差异较大,不建议临时抱佛脚。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>时间线:<b>7–9 月</b>报名并参加 UCAT(2026 年度窗口为 7 月 13 日–9 月 24 日,预约截止 9 月 16 日)→ <b>10 月至次年 3 月中</b>网申开放 → <b>4 月</b>多站面试(MMI)→ <b>4–6 月</b>放榜与接受名额 → 6–7 月体检 → 7 月入学注册。</li><li>仅接受入学前 12 个月内的 UCAT 成绩,需精确规划考试时间(如申请 AY2027-28 入学,应在 2026 年 7–9 月应考;错过此窗口须改考次年 UCAT,入学将顺延一届)。</li><li>录取规模约 160 人/年,小班制;竞争激烈程度不亚于 NUS。</li></ul></div>
-    </div></div>
-    <div class="checklist"><h2>辅导员使用清单 · 医科</h2><ol><li>JC1 上学期:确认科目组合(H2 化学 + 生物/物理)是否达标,尽早排除硬性门槛问题。</li><li>提醒学生 2026 年 11 月应考批次起正式全面採用 70 分制 UAS 计分,协助换算预估分数,不要仅套用旧制字母等级心理预期。</li><li>有意报考 NTU 医学的学生:<b>务必在 JC2 升 JC2 的暑假(约 5–9 月)提前完成 UCAT 报名与应考</b>,预约截止日通常在 9 月中旬,早于 A-Level 放榜 —— 一旦错过当年窗口,只能改考次年 UCAT,入学将顺延一届。</li><li>JC1 暑假前:协助学生规划医院见习 / 长期性医疗义工,确保有持续性记录而非临时凑数。</li><li>JC2 上学期:启动个人陈述与"十大成就"清单初稿讨论,注意 NUS(约 500 字)与 NTU(约 300 字)篇幅要求不同,需分别准备。</li><li>JC2 A-Level 后:核对网申志愿顺序是否正确(医科是否列为第一或合规的第二志愿)。</li><li>筛选结果公布前后:安排 MMI / FSA 模拟面试,针对情境判断与伦理决策题进行练习。</li></ol></div>
-  </section>
-  <section class="track-panel" id="panel-law">
-    <div class="timeline"><div class="stage"><div class="yr">中三 · 中四</div><p>加强英语表达与逻辑写作能力;接触辩论、模拟法庭或时评类活动,养成关注时事的习惯。</p></div><div class="stage"><div class="yr">JC1</div><p>保持英语科目成绩(尤其 GP);持续参与需要论证与公开表达的 CCA 或社区项目。</p></div><div class="stage"><div class="yr">JC2</div><p>准备个人陈述与简历;了解笔试与面试形式并做无实质法律知识要求的推理/写作练习。</p></div></div>
-    <div class="grid">
-      <div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul><li>无特定科目先修要求,但<b>英语语言与论证能力</b>被高度重视(GP 成绩尤为关键)。</li><li><b>最新 IGP</b>:NUS 法律 10th–90th 百分位<b>均为 AAA/A</b>,录取名额约 <b>252 人</b>;SMU 法律同样 10th–90th 百分位<b>均为 AAA/A</b>,录取名额约 <b>182 人</b>(理工生 GPA 区间约 3.73–3.97)。两校均是本地录取门槛最高的一档。</li><li>需符合母语语言(MTL)要求(新加坡公民 / PR 适用)。</li><li>SMU 另要求英语科目 CAP 达 <b>B+</b> 或以上(或达到指定英语课程标准)。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li>不预设法律知识,但看重<b>推理能力</b>与清晰表达 —— 辩论队、模拟法庭、学生会、校刊/时评写作是常见加分经历。</li><li>CCA 与社区服务(CIP)中的持续投入与承担角色,会被纳入整体评估。</li><li>建议培养对时事、社会议题的独立思考习惯,面试常涉及情境判断与观点阐述。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述</b> + 简历(CV,列明教育背景及工作/活动经历)。</li><li>两名学术推荐人;毕业多年者可用雇主推荐信替代。</li><li>NUS 法律:笔试(约 1 小时 15 分钟)+ 面试(10–20 分钟),测试英语与推理能力,<b>不要求预先法律知识</b>。</li><li>SMU 法律:笔试(约 1.5 小时)后进一步筛选,再安排面试。</li></ul></div>
-      <div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>法律须列为<b>第一志愿</b>方获考虑。</li><li>NUS 自 2026 年起改为<b>两阶段</b>:先笔试,通过筛选者才获邀参加面试。</li><li>SMU 同样为笔试→二次筛选→面试的流程。</li><li>笔试与面试均在校内进行,国际生另有安排;录取结果一般在三至五月陆续公布。</li></ul></div>
-    </div>
-    <div class="checklist"><h2>辅导员使用清单 · 法律</h2><ol><li>JC1 阶段起:持续关注英语 / GP 成绩表现 —— 这是两校筛选中最核心的学术指标,比单一科目更重要。</li><li>JC1–JC2:安排辩论队、模拟法庭、时评写作等推理与表达类活动,强调<b>长期持续参与</b>而非临时突击。</li><li>留意 SMU 网申通常在 <b>11 月中旬</b>(A-Level 大考后、放榜前)即已开放,可提醒学生提前准备材料。</li><li>提醒申请 SMU 法律的学生:<b>3 月 10 日前</b>递交申请可获得较早的笔试场次;拖到之后递交则笔试与后续流程都会顺延。</li><li>JC2 上学期:启动个人陈述与简历(CV)初稿讨论,并及早联系两名学术推荐人,预留其撰写时间。</li><li>JC2 A-Level 后:核对网申志愿顺序 —— 法律须列为<b>第一志愿</b>方获考虑。</li><li>笔试前:安排不涉及法律知识的推理与写作模拟(NUS 约 1 小时 15 分钟,SMU 约 1.5 小时);面试前加练英语表达与情境判断题应答。</li></ol></div>
-  </section>
-  <section class="track-panel" id="panel-cal">
-    <p class="note" style="margin-bottom:1.2rem;">以下按 AY2026/27 招生周期(即 A-Level 于 2025 年 11 月应考、2026 年 2 月放榜的批次)的历年惯例月份排列,供规划参考;每年具体日期会小幅调整,截止申请前务必对照官网确认当年公告。时间轴覆盖从 JC2 学年年中到入学注册的完整周期。</p>
-    <div class="calendar-list">
-      <div class="cal-item"><div class="month">5–6 月</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>UCAT 账号注册开放</h3><p>意向报考 NTU 医学的学生须尽早创建 UCAT 账号,以免临近预约截止日才手忙脚乱。</p></div></div>
-      <div class="cal-item"><div class="month">7 月中 – 9 月中</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>UCAT 测试窗口</h3><p>预约通常在 9 月中旬截止(早于 A-Level 放榜),错过则只能等次年重考,入学顺延一届。</p></div></div>
-      <div class="cal-item"><div class="month">10 – 11 月</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>A-Level 大考</h3><p>JC2 学生应考 Singapore-Cambridge GCE A-Level 会考。</p></div></div>
-      <div class="cal-item"><div class="month">11 月中旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>SMU 网申开放</h3><p>SMU 的申请窗口通常在 A-Level 大考后、放榜前即已开放(往年惯例 11 月中旬起)。</p></div></div>
-      <div class="cal-item"><div class="month">2 月下旬</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>A-Level 成绩放榜</h3><p>NUS / NTU 的 A-Level 申请通道通常在放榜当天或次日开放。</p></div></div>
-      <div class="cal-item"><div class="month">2 月下旬 – 3 月 19 日前后</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>NUS / NTU / SMU 网申截止</h3><p>三校 A-Level 申请通道往年惯例同日截止(约 3 月 19 日 23:59);医科/法律须在志愿中列为第一(或合规的第二)志愿。</p></div></div>
-      <div class="cal-item"><div class="month">3 月上旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>提早递交者的笔试</h3><p>3 月 10 日前完成申请者,笔试安排在约 3 月中旬;之后递交者笔试顺延至 3 月下旬。</p></div></div>
-      <div class="cal-item"><div class="month">3 月最后一周</div><div><span class="cal-tags"><span class="cal-tag med">NUS 医学</span></span><h3>学术筛选完成</h3><p>通过筛选者随后获邀参加 FSA(专项技能评估,含 MMI)。</p></div></div>
-      <div class="cal-item"><div class="month">3 月下旬 – 4 月上旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>面试</h3><p>通过笔试筛选的申请者获邀参加面试。</p></div></div>
-      <div class="cal-item"><div class="month">4 月中旬</div><div><span class="cal-tags"><span class="cal-tag law">NUS 法律</span></span><h3>笔试</h3><p>约 1 小时 15 分钟,测试英语与推理能力,无需预先法律知识。</p></div></div>
-      <div class="cal-item"><div class="month">4 月</div><div><span class="cal-tags"><span class="cal-tag med">NUS 医学</span><span class="cal-tag med">NTU 医学</span></span><h3>多站面试(MMI)/ FSA 评估</h3><p>两校医学院均在四月集中安排面试与评估。</p></div></div>
-      <div class="cal-item"><div class="month">4 月下旬</div><div><span class="cal-tags"><span class="cal-tag law">NUS 法律</span></span><h3>面试</h3><p>仅笔试通过筛选者获邀参加,时长约 10–20 分钟。</p></div></div>
-      <div class="cal-item"><div class="month">4 – 6 月</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>放榜、接受名额、健康检查</h3><p>MMI 后陆续放榜,接受名额后安排入学前体检。</p></div></div>
-      <div class="cal-item"><div class="month">5 月第三周</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>NUS 录取结果公布(大部分申请者)</h3><p>其余申请者的结果陆续发出。</p></div></div>
-      <div class="cal-item"><div class="month">5 月 25 日前后</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>第一轮录取接受截止</h3><p>通过 Joint Acceptance Portal(JAP)确认接受录取。</p></div></div>
-      <div class="cal-item"><div class="month">6 月上旬</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>第二轮录取接受窗口</h3><p>供第一轮后补录取或候补名单的申请者使用。</p></div></div>
-      <div class="cal-item"><div class="month">7 – 8 月</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>入学注册 / 开学</h3><p>完成报到注册、缴费等入学手续,新学年正式开始。</p></div></div>
-    </div>
-  </section>
-  <footer>官方信息来源(建议定期核对更新):
-    <ul>
-      <li><a href="https://www.nus.edu.sg/oam/admissions/indicative-grade-profile" target="_blank" rel="noopener">NUS — 最新 Indicative Grade Profile(IGP)</a></li>
-      <li><a href="https://admissions.smu.edu.sg/admissions-requirements/indicative-grade-profile" target="_blank" rel="noopener">SMU — 最新 Indicative Grade Profile(IGP)</a></li>
-      <li><a href="https://medicine.nus.edu.sg/prospective-students/nus-medicine-pre-requisites/" target="_blank" rel="noopener">NUS Medicine — 入学先修要求</a></li>
-      <li><a href="https://medicine.nus.edu.sg/prospective-students/how-to-apply/" target="_blank" rel="noopener">NUS Medicine — 申请流程</a></li>
-      <li><a href="https://ntu.edu.sg//education/undergraduate-programme/bachelor-of-medicine-and-bachelor-of-surgery-(mbbs)" target="_blank" rel="noopener">NTU LKCMedicine — 课程与申请说明</a></li>
-      <li><a href="https://www.ucat.ac.uk/about-ucat/ucat-test-dates/" target="_blank" rel="noopener">UCAT Consortium — 最新报名与测试日期</a></li>
-      <li><a href="https://law1a.nus.edu.sg/admissions/faqs.html" target="_blank" rel="noopener">NUS Law — 招生常见问题</a></li>
-      <li><a href="https://admissions.smu.edu.sg/faqs/law-interviews-and-writing-tests" target="_blank" rel="noopener">SMU Law — 笔试与面试说明</a></li>
-    </ul>
-  </footer>
+<div class="timeline"><div class="stage"><div class="yr">中三 · 中四</div><p>接触医疗相关志愿服务、参加科学类 CCA,开始记录活动与感悟,为"过去四年经历"打基础。</p></div><div class="stage"><div class="yr">JC1</div><p>确认 H2 化学 + 生物/物理组合;安排医院见习或长期义工;留意 FSA/SJT、UCAT 等评估形式。</p></div><div class="stage"><div class="yr">JC2</div><p>整理"十大成就与经历"清单,准备个人陈述草稿;A-Level 后按学校时间线完成网申、评估与面试。<b>NTU 申请者的 UCAT 窗口通常在当年 7–9 月,报名/预约截止日一般在 9 月中旬</b>,早于 A-Level 放榜 —— 务必提前一年规划,切勿等到成绩公布后才准备。</p></div></div>
+<div class="school-switch" role="tablist" aria-label="医学院校"><button class="active" data-school="nus" role="tab" aria-selected="true" aria-controls="school-nus">NUS 医学(YLLSoM)</button><button data-school="ntu" role="tab" aria-selected="false" aria-controls="school-ntu">NTU 医学(LKCMedicine)</button></div>
+<div class="school-panel active" id="school-nus"><div class="grid">
+<div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul><li>科目组合:<b>H2 化学</b> 必修,另需 H2 生物<b>或</b>物理。</li><li>Major CAP 化学 ≥2.0,生物/物理(择一)≥2.0;另一门主科及 GP、专题作业(PW)CAP 均需 ≥1.0。</li><li>自 AY2026 起,<b>PW 须获及格</b>方符合申请资格;H2 知识与探究(KI)不再能替代 GP。</li><li><b>最新 IGP</b>(2026年1月发布,对应上一批 AY2025/26 录取生):A-Level 10th–90th 百分位<b>均为 AAA/A</b>;当年录取名额约 <b>286 人</b>。</li><li>国际生 / IB 预估成绩者,通常另需 UCAT 或 SAT+AP 作为补充资格;本地 A-Level / 理工学院文凭申请者<b>无需</b>标准化测试。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li>医疗相关经历:医院/诊所见习(attachment)、长期性(而非一次性)医疗义工。</li><li>CCA / CIP 中的<b>领导岗位</b>与持续投入,比参与广度更受重视。</li><li>需准备"过去四年最具代表性的十项成就与活动"清单,体现从医动机的连贯性。</li><li>2026 年起改用 <b>FSA</b>(专项技能评估,含 MMI 多站面试,考察同理心、沟通、团队合作与伦理判断);原情境判断测试(SJT)已取消。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述</b>(约 500 字):清晰交代从医动机、个人历程与适配理由,呼应学校"病患照护、科研"等办学理念。</li><li>官方<b>学校推荐信</b>(School Testimonial)+ 两封学术或专业推荐信。</li><li>申请途径分两类:<b>Standard Scheme</b>(以学术表现筛选)或 <b>ABAS/EBAS</b>(面向有突出非学术成就的申请者,注意提交截止日通常更早)。</li><li>提前熟悉 MMI 常见题型,避免临场首次接触。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>通过 NUS 招生办网申系统提交;医学须为<b>第一或第二志愿</b>(若为第二志愿,第一志愿须是需要面试/测试的课程)。</li><li>筛选一般在<b>三月最后一周</b>进行;通过者需完成 FSA 评估。</li><li>录取规模约 280 人/年,是本地两所医学院中名额较多的一所。</li><li>建议提前一学年梳理时间线,避免与其他志愿科目的面试时间冲突。</li></ul></div>
+</div></div>
+<div class="school-panel" id="school-ntu"><div class="grid">
+<div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul><li>科目组合:<b>H2 化学</b> 良好通过,另需 H2 生物<b>或</b>物理良好通过。</li><li><b>最新 IGP</b>:A-Level 10th–90th 百分位<b>均为 AAA/A</b>(RP 估算至少 87.5),当年录取名额约 <b>160 人</b>。</li><li>理工学院申请者:GPA 通常需 3.7 以上,且以健康科学相关专业更具优势。</li><li>IB 申请者参考区间约 42–45 分,需 HL 化学 + HL 生物或物理良好通过。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li><b>UCAT 对所有申请者均为强制要求</b>,无本地/国际生之分 —— 这是与 NUS 医学最大的差异点。</li><li>UCAT 自 2025 年应考起<b>取消了"抽象推理"子项</b>,现由言语推理、决策判断、数量推理三个认知子项构成,每项 300–900 分,<b>总分满分改为 2700 分</b>(旧制满分 3600 分,两者不可直接换算)。情境判断测试(SJT)另按 1–4 级评定,不计入总分。</li><li>NTU 官方尚未公布新 2700 分制下的 10th/90th 百分位录取基准分;此前满分 3600 分制的旧基准数字(如 2720/3130)已不适用于 2025 年之后应考的成绩,规划时不应再直接参照。</li><li><b>时间紧迫提醒</b>:UCAT 2026(对应申请 AY2027–28 学年入学,即现届 JC2 学生 2026 年 11 月 A-Level 后申请的批次)测试窗口为 <b>7 月 13 日至 9 月 24 日</b>,账号注册与预约已于 <b>9 月 16 日截止</b>。尚未应考的现届 JC2 学生,将无法以本届 UCAT 成绩申请 AY2027–28 入学,需改考 UCAT 2027(对应 AY2028–29 入学)或调整申请规划。</li><li>同样重视医疗义工、CCA 领导经历,并在面试中考察团队合作与领导力特质。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述仅 300 字</b>(比 NUS 的 500 字更精炼),需直接点出领导力与团队合作等校方看重的特质。</li><li>两份在线推荐表,其中一份须来自<b>公民与道德教育(Civics)导师/班主任</b>。</li><li>若申请 <b>ABAS</b>(能力本位招生计划),须额外提交课外成就论述及 1–2 位评估人的在线评价表。</li><li>UCAT 需提前 3–6 个月备考,题型与常规考试差异较大,不建议临时抱佛脚。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>时间线:<b>7–9 月</b>报名并参加 UCAT(2026 年度窗口为 7 月 13 日–9 月 24 日,预约截止 9 月 16 日)→ <b>10 月至次年 3 月中</b>网申开放 → <b>4 月</b>多站面试(MMI)→ <b>4–6 月</b>放榜与接受名额 → 6–7 月体检 → 7 月入学注册。</li><li>仅接受入学前 12 个月内的 UCAT 成绩,需精确规划考试时间(如申请 AY2027-28 入学,应在 2026 年 7–9 月应考;错过此窗口须改考次年 UCAT,入学将顺延一届)。</li><li>录取规模约 160 人/年,小班制;竞争激烈程度不亚于 NUS。</li></ul></div>
+</div></div>
+<div class="checklist"><h2>辅导员使用清单 · 医科</h2><ol><li>JC1 上学期:确认科目组合(H2 化学 + 生物/物理)是否达标,尽早排除硬性门槛问题。</li><li>提醒学生 2026 年 11 月应考批次起正式全面採用 70 分制 UAS 计分,协助换算预估分数,不要仅套用旧制字母等级心理预期。</li><li>有意报考 NTU 医学的学生:<b>务必在 JC2 升 JC2 的暑假(约 5–9 月)提前完成 UCAT 报名与应考</b>,预约截止日通常在 9 月中旬,早于 A-Level 放榜 —— 一旦错过当年窗口,只能改考次年 UCAT,入学将顺延一届。</li><li>JC1 暑假前:协助学生规划医院见习 / 长期性医疗义工,确保有持续性记录而非临时凑数。</li><li>JC2 上学期:启动个人陈述与"十大成就"清单初稿讨论,注意 NUS(约 500 字)与 NTU(约 300 字)篇幅要求不同,需分别准备。</li><li>JC2 A-Level 后:核对网申志愿顺序是否正确(医科是否列为第一或合规的第二志愿)。</li><li>筛选结果公布前后:安排 MMI / FSA 模拟面试,针对情境判断与伦理决策题进行练习。</li></ol></div>
+</section>
+<section class="track-panel" id="panel-law">
+<div class="timeline"><div class="stage"><div class="yr">中三 · 中四</div><p>加强英语表达与逻辑写作能力;接触辩论、模拟法庭或时评类活动,养成关注时事的习惯。</p></div><div class="stage"><div class="yr">JC1</div><p>保持英语科目成绩(尤其 GP);持续参与需要论证与公开表达的 CCA 或社区项目。</p></div><div class="stage"><div class="yr">JC2</div><p>准备个人陈述与简历;了解笔试与面试形式并做无实质法律知识要求的推理/写作练习。</p></div></div>
+<div class="grid">
+<div class="card"><h2><span class="dot"></span>学术成绩要求<span class="tag">Academic</span></h2><ul><li>无特定科目先修要求,但<b>英语语言与论证能力</b>被高度重视(GP 成绩尤为关键)。</li><li><b>最新 IGP</b>:NUS 法律 10th–90th 百分位<b>均为 AAA/A</b>,录取名额约 <b>252 人</b>;SMU 法律同样 10th–90th 百分位<b>均为 AAA/A</b>,录取名额约 <b>182 人</b>(理工生 GPA 区间约 3.73–3.97)。两校均是本地录取门槛最高的一档。</li><li>需符合母语语言(MTL)要求(新加坡公民 / PR 适用)。</li><li>SMU 另要求英语科目 CAP 达 <b>B+</b> 或以上(或达到指定英语课程标准)。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>背景经验<span class="tag">Experience</span></h2><ul><li>不预设法律知识,但看重<b>推理能力</b>与清晰表达 —— 辩论队、模拟法庭、学生会、校刊/时评写作是常见加分经历。</li><li>CCA 与社区服务(CIP)中的持续投入与承担角色,会被纳入整体评估。</li><li>建议培养对时事、社会议题的独立思考习惯,面试常涉及情境判断与观点阐述。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请准备<span class="tag">Prep</span></h2><ul><li><b>个人陈述</b> + 简历(CV,列明教育背景及工作/活动经历)。</li><li>两名学术推荐人;毕业多年者可用雇主推荐信替代。</li><li>NUS 法律:笔试(约 1 小时 15 分钟)+ 面试(10–20 分钟),测试英语与推理能力,<b>不要求预先法律知识</b>。</li><li>SMU 法律:笔试(约 1.5 小时)后进一步筛选,再安排面试。</li></ul></div>
+<div class="card"><h2><span class="dot"></span>申请流程<span class="tag">Process</span></h2><ul><li>法律须列为<b>第一志愿</b>方获考虑。</li><li>NUS 自 2026 年起改为<b>两阶段</b>:先笔试,通过筛选者才获邀参加面试。</li><li>SMU 同样为笔试→二次筛选→面试的流程。</li><li>笔试与面试均在校内进行,国际生另有安排;录取结果一般在三至五月陆续公布。</li></ul></div>
+</div>
+<div class="checklist"><h2>辅导员使用清单 · 法律</h2><ol><li>JC1 阶段起:持续关注英语 / GP 成绩表现 —— 这是两校筛选中最核心的学术指标,比单一科目更重要。</li><li>JC1–JC2:安排辩论队、模拟法庭、时评写作等推理与表达类活动,强调<b>长期持续参与</b>而非临时突击。</li><li>留意 SMU 网申通常在 <b>11 月中旬</b>(A-Level 大考后、放榜前)即已开放,可提醒学生提前准备材料。</li><li>提醒申请 SMU 法律的学生:<b>3 月 10 日前</b>递交申请可获得较早的笔试场次;拖到之后递交则笔试与后续流程都会顺延。</li><li>JC2 上学期:启动个人陈述与简历(CV)初稿讨论,并及早联系两名学术推荐人,预留其撰写时间。</li><li>JC2 A-Level 后:核对网申志愿顺序 —— 法律须列为<b>第一志愿</b>方获考虑。</li><li>笔试前:安排不涉及法律知识的推理与写作模拟(NUS 约 1 小时 15 分钟,SMU 约 1.5 小时);面试前加练英语表达与情境判断题应答。</li></ol></div>
+</section>
+<section class="track-panel" id="panel-cal">
+<p class="note" style="margin-bottom:1.2rem;">以下按 AY2026/27 招生周期(即 A-Level 于 2025 年 11 月应考、2026 年 2 月放榜的批次)的历年惯例月份排列,供规划参考;每年具体日期会小幅调整,截止申请前务必对照官网确认当年公告。时间轴覆盖从 JC2 学年年中到入学注册的完整周期。</p>
+<div class="calendar-list">
+<div class="cal-item"><div class="month">5–6 月</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>UCAT 账号注册开放</h3><p>意向报考 NTU 医学的学生须尽早创建 UCAT 账号,以免临近预约截止日才手忙脚乱。</p></div></div>
+<div class="cal-item"><div class="month">7 月中 – 9 月中</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>UCAT 测试窗口</h3><p>预约通常在 9 月中旬截止(早于 A-Level 放榜),错过则只能等次年重考,入学顺延一届。</p></div></div>
+<div class="cal-item"><div class="month">10 – 11 月</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>A-Level 大考</h3><p>JC2 学生应考 Singapore-Cambridge GCE A-Level 会考。</p></div></div>
+<div class="cal-item"><div class="month">11 月中旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>SMU 网申开放</h3><p>SMU 的申请窗口通常在 A-Level 大考后、放榜前即已开放(往年惯例 11 月中旬起)。</p></div></div>
+<div class="cal-item"><div class="month">2 月下旬</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>A-Level 成绩放榜</h3><p>NUS / NTU 的 A-Level 申请通道通常在放榜当天或次日开放。</p></div></div>
+<div class="cal-item"><div class="month">2 月下旬 – 3 月 19 日前后</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>NUS / NTU / SMU 网申截止</h3><p>三校 A-Level 申请通道往年惯例同日截止(约 3 月 19 日 23:59);医科/法律须在志愿中列为第一(或合规的第二)志愿。</p></div></div>
+<div class="cal-item"><div class="month">3 月上旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>提早递交者的笔试</h3><p>3 月 10 日前完成申请者,笔试安排在约 3 月中旬;之后递交者笔试顺延至 3 月下旬。</p></div></div>
+<div class="cal-item"><div class="month">3 月最后一周</div><div><span class="cal-tags"><span class="cal-tag med">NUS 医学</span></span><h3>学术筛选完成</h3><p>通过筛选者随后获邀参加 FSA(专项技能评估,含 MMI)。</p></div></div>
+<div class="cal-item"><div class="month">3 月下旬 – 4 月上旬</div><div><span class="cal-tags"><span class="cal-tag law">SMU 法律</span></span><h3>面试</h3><p>通过笔试筛选的申请者获邀参加面试。</p></div></div>
+<div class="cal-item"><div class="month">4 月中旬</div><div><span class="cal-tags"><span class="cal-tag law">NUS 法律</span></span><h3>笔试</h3><p>约 1 小时 15 分钟,测试英语与推理能力,无需预先法律知识。</p></div></div>
+<div class="cal-item"><div class="month">4 月</div><div><span class="cal-tags"><span class="cal-tag med">NUS 医学</span><span class="cal-tag med">NTU 医学</span></span><h3>多站面试(MMI)/ FSA 评估</h3><p>两校医学院均在四月集中安排面试与评估。</p></div></div>
+<div class="cal-item"><div class="month">4 月下旬</div><div><span class="cal-tags"><span class="cal-tag law">NUS 法律</span></span><h3>面试</h3><p>仅笔试通过筛选者获邀参加,时长约 10–20 分钟。</p></div></div>
+<div class="cal-item"><div class="month">4 – 6 月</div><div><span class="cal-tags"><span class="cal-tag med">NTU 医学</span></span><h3>放榜、接受名额、健康检查</h3><p>MMI 后陆续放榜,接受名额后安排入学前体检。</p></div></div>
+<div class="cal-item"><div class="month">5 月第三周</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>NUS 录取结果公布(大部分申请者)</h3><p>其余申请者的结果陆续发出。</p></div></div>
+<div class="cal-item"><div class="month">5 月 25 日前后</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>第一轮录取接受截止</h3><p>通过 Joint Acceptance Portal(JAP)确认接受录取。</p></div></div>
+<div class="cal-item"><div class="month">6 月上旬</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>第二轮录取接受窗口</h3><p>供第一轮后补录取或候补名单的申请者使用。</p></div></div>
+<div class="cal-item"><div class="month">7 – 8 月</div><div><span class="cal-tags"><span class="cal-tag med">医科</span><span class="cal-tag law">法律</span></span><h3>入学注册 / 开学</h3><p>完成报到注册、缴费等入学手续,新学年正式开始。</p></div></div>
+</div>
+</section>
+<footer>官方信息来源(建议定期核对更新):<ul><li><a href="https://www.nus.edu.sg/oam/admissions/indicative-grade-profile" target="_blank" rel="noopener">NUS — 最新 Indicative Grade Profile(IGP)</a></li><li><a href="https://admissions.smu.edu.sg/admissions-requirements/indicative-grade-profile" target="_blank" rel="noopener">SMU — 最新 Indicative Grade Profile(IGP)</a></li><li><a href="https://medicine.nus.edu.sg/prospective-students/nus-medicine-pre-requisites/" target="_blank" rel="noopener">NUS Medicine — 入学先修要求</a></li><li><a href="https://medicine.nus.edu.sg/prospective-students/how-to-apply/" target="_blank" rel="noopener">NUS Medicine — 申请流程</a></li><li><a href="https://ntu.edu.sg//education/undergraduate-programme/bachelor-of-medicine-and-bachelor-of-surgery-(mbbs)" target="_blank" rel="noopener">NTU LKCMedicine — 课程与申请说明</a></li><li><a href="https://www.ucat.ac.uk/about-ucat/ucat-test-dates/" target="_blank" rel="noopener">UCAT Consortium — 最新报名与测试日期</a></li><li><a href="https://law1a.nus.edu.sg/admissions/faqs.html" target="_blank" rel="noopener">NUS Law — 招生常见问题</a></li><li><a href="https://admissions.smu.edu.sg/faqs/law-interviews-and-writing-tests" target="_blank" rel="noopener">SMU Law — 笔试与面试说明</a></li></ul></footer>
 </div>
 <script>
-  const PASSWORD_HASH='1fd8607cb9f85718678a131c8dc73d434c5ff6d78462e7e5dcd08b8ab90bae58';
-  const passwordGate=document.getElementById('passwordGate');
-  const passwordForm=document.getElementById('passwordForm');
-  const passwordInput=document.getElementById('passwordInput');
-  const passwordError=document.getElementById('passwordError');
-  const unlock=()=>{passwordGate.style.display='none';document.body.classList.remove('locked');};
-  const sha256=async value=>{const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');};
-  passwordForm.addEventListener('submit',async e=>{e.preventDefault();passwordError.textContent='';const hash=await sha256(passwordInput.value);if(hash===PASSWORD_HASH){unlock();}else{passwordError.textContent='密码错误，请重新输入。';passwordInput.value='';passwordInput.focus();}});
-    const homeBtn=document.getElementById('homeBtn');
-  const backTop=document.getElementById('backTop');
-  const goTop=()=>window.scrollTo({top:0,behavior:'smooth'});
-  if(homeBtn)homeBtn.addEventListener('click',goTop);
-  if(backTop)backTop.addEventListener('click',goTop);
-  const updateBackTop=()=>{if(backTop)backTop.classList.toggle('show',window.scrollY>420);};
-  window.addEventListener('scroll',updateBackTop,{passive:true});updateBackTop();
-  document.querySelectorAll('nav.tracks button[data-track]').forEach(btn=>{btn.addEventListener('click',()=>{const targetId='panel-'+btn.dataset.track,target=document.getElementById(targetId);if(!target)return;document.querySelectorAll('nav.tracks button[data-track]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');});document.querySelectorAll('.track-panel').forEach(p=>p.classList.toggle('active',p.id===targetId));target.scrollIntoView({behavior:'smooth',block:'start'});});});
-  document.querySelectorAll('.school-switch button[data-school]').forEach(btn=>{btn.addEventListener('click',()=>{const group=btn.closest('.track-panel'),targetId='school-'+btn.dataset.school,target=document.getElementById(targetId);if(!group||!target)return;group.querySelectorAll('.school-switch button[data-school]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false');});group.querySelectorAll('.school-panel').forEach(p=>p.classList.toggle('active',p.id===targetId));});});
-  document.querySelectorAll('nav.tracks button,.school-switch button').forEach(btn=>{btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();btn.click();}});});
+const PASSWORD_HASH='1fd8607cb9f85718678a131c8dc73d434c5ff6d78462e7e5dcd08b8ab90bae58';
+const passwordGate=document.getElementById('passwordGate'),passwordForm=document.getElementById('passwordForm'),passwordInput=document.getElementById('passwordInput'),passwordError=document.getElementById('passwordError');
+const unlock=()=>{document.body.classList.remove('locked');passwordGate.remove();};
+const sha256=async value=>{const data=new TextEncoder().encode(value);const hash=await crypto.subtle.digest('SHA-256',data);return Array.from(new Uint8Array(hash)).map(b=>b.toString(16).padStart(2,'0')).join('');};
+passwordForm.addEventListener('submit',async e=>{e.preventDefault();passwordError.textContent='';const hash=await sha256(passwordInput.value);if(hash===PASSWORD_HASH){unlock();}else{passwordError.textContent='密码错误，请重新输入。';passwordInput.value='';passwordInput.focus();}});
+const homeBtn=document.getElementById('homeBtn'),backTop=document.getElementById('backTop'),goTop=()=>window.scrollTo({top:0,behavior:'smooth'});
+if(homeBtn)homeBtn.addEventListener('click',goTop);if(backTop)backTop.addEventListener('click',goTop);
+const updateBackTop=()=>{if(backTop)backTop.classList.toggle('show',window.scrollY>420)};window.addEventListener('scroll',updateBackTop,{passive:true});updateBackTop();
+document.querySelectorAll('nav.tracks button[data-track]').forEach(btn=>{btn.addEventListener('click',()=>{const targetId='panel-'+btn.dataset.track,target=document.getElementById(targetId);if(!target)return;document.querySelectorAll('nav.tracks button[data-track]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false')});document.querySelectorAll('.track-panel').forEach(p=>p.classList.toggle('active',p.id===targetId));target.scrollIntoView({behavior:'smooth',block:'start'})})});
+document.querySelectorAll('.school-switch button[data-school]').forEach(btn=>{btn.addEventListener('click',()=>{const group=btn.closest('.track-panel'),targetId='school-'+btn.dataset.school,target=document.getElementById(targetId);if(!group||!target)return;group.querySelectorAll('.school-switch button[data-school]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',active?'true':'false')});group.querySelectorAll('.school-panel').forEach(p=>p.classList.toggle('active',p.id===targetId))})});
+document.querySelectorAll('nav.tracks button,.school-switch button').forEach(btn=>{btn.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();btn.click()}})});
 </script>
 </body>
 </html>
