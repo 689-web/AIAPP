@@ -189,6 +189,7 @@
     <div class="topbar-actions">
       <button type="button" id="homeBtn" aria-label="回到顶部">顶部</button>
     </div>
+    <button type="button" class="back-top" id="backTop" aria-label="回到顶部" title="回到顶部">↑</button>
   </div>
 
   <header class="top">
@@ -198,10 +199,11 @@
     <p class="note"><b>A-Level 计分制度更新:</b> 从 AY2026/27 学年入学(即 2025 年 11 月应考、2026 年 2 月放榜的批次)起,MOE 改用<b>70 分制大学入学分数(UAS)</b>:最佳 3 门 H2(满分 60)+ GP(满分 10),PW 改为及格/不及格制,第四门 H1 或母语可选计入(仅在提高总分时纳入并按比例换算)。下文各项目的最新 IGP 仍以官方 2026 年 1 月发布的旧制(3H2/1H1 字母等级)数据呈现 —— 这是上一批(AY2025/26)录取生的实际情况,新分制下的对应门槛官方尚未公布,现届 JC2 学生(2026 年 11 月应考)将是首批完整适用新分制的考生。</p>
   </header>
 
-  <nav class="tracks">
-    <button class="active" data-track="med">医科</button>
-    <button data-track="law">法律</button>
-    <button data-track="cal">关键时间窗口</button>
+  <nav class="tracks" role="tablist" aria-label="申请方向">
+
+    <button class="active" data-track="med" role="tab" aria-selected="true" aria-controls="panel-med">医科</button>
+    <button data-track="law" role="tab" aria-selected="false" aria-controls="panel-law">法律</button>
+    <button data-track="cal" role="tab" aria-selected="false" aria-controls="panel-cal">关键时间窗口</button>
   </nav>
 
   <!-- MEDICINE -->
@@ -212,9 +214,9 @@
       <div class="stage"><div class="yr">JC2</div><p>整理"十大成就与经历"清单,准备个人陈述草稿;A-Level 后按学校时间线完成网申、评估与面试。<b>NTU 申请者的 UCAT 窗口通常在当年 7–9 月,报名/预约截止日一般在 9 月中旬</b>,早于 A-Level 放榜 —— 务必提前一年规划,切勿等到成绩公布后才准备。</p></div>
     </div>
 
-    <div class="school-switch">
-      <button class="active" data-school="nus">NUS 医学(YLLSoM)</button>
-      <button data-school="ntu">NTU 医学(LKCMedicine)</button>
+    <div class="school-switch" role="tablist" aria-label="医学院校">
+      <button class="active" data-school="nus" role="tab" aria-selected="true" aria-controls="school-nus">NUS 医学(YLLSoM)</button>
+      <button data-school="ntu" role="tab" aria-selected="false" aria-controls="school-ntu">NTU 医学(LKCMedicine)</button>
     </div>
 
     <div class="school-panel active" id="school-nus">
@@ -501,29 +503,59 @@
   const homeBtn = document.getElementById('homeBtn');
   const backTop = document.getElementById('backTop');
   const goTop = () => window.scrollTo({top:0, behavior:'smooth'});
-  homeBtn.addEventListener('click', goTop);
-  if(backTop){
-    backTop.addEventListener('click', goTop);
-    window.addEventListener('scroll', ()=>{
-      backTop.classList.toggle('show', window.scrollY > 420);
-    }, {passive:true});
-  }
 
-  document.querySelectorAll('nav.tracks button').forEach(btn=>{
+  if(homeBtn) homeBtn.addEventListener('click', goTop);
+  if(backTop) backTop.addEventListener('click', goTop);
+
+  const updateBackTop = () => {
+    if(backTop) backTop.classList.toggle('show', window.scrollY > 420);
+  };
+  window.addEventListener('scroll', updateBackTop, {passive:true});
+  updateBackTop();
+
+  document.querySelectorAll('nav.tracks button[data-track]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
-      document.querySelectorAll('nav.tracks button').forEach(b=>b.classList.remove('active'));
-      document.querySelectorAll('.track-panel').forEach(p=>p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('panel-' + btn.dataset.track).classList.add('active');
+      const targetId = 'panel-' + btn.dataset.track;
+      const target = document.getElementById(targetId);
+      if(!target) return;
+
+      document.querySelectorAll('nav.tracks button[data-track]').forEach(b=>{
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      document.querySelectorAll('.track-panel').forEach(p=>{
+        p.classList.toggle('active', p.id === targetId);
+      });
+
+      target.scrollIntoView({behavior:'smooth', block:'start'});
     });
   });
-  document.querySelectorAll('.school-switch button').forEach(btn=>{
+
+  document.querySelectorAll('.school-switch button[data-school]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const group = btn.closest('.track-panel');
-      group.querySelectorAll('.school-switch button').forEach(b=>b.classList.remove('active'));
-      group.querySelectorAll('.school-panel').forEach(p=>p.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('school-' + btn.dataset.school).classList.add('active');
+      const targetId = 'school-' + btn.dataset.school;
+      const target = document.getElementById(targetId);
+      if(!group || !target) return;
+
+      group.querySelectorAll('.school-switch button[data-school]').forEach(b=>{
+        const active = b === btn;
+        b.classList.toggle('active', active);
+        b.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+      group.querySelectorAll('.school-panel').forEach(p=>{
+        p.classList.toggle('active', p.id === targetId);
+      });
+    });
+  });
+
+  document.querySelectorAll('nav.tracks button, .school-switch button').forEach(btn=>{
+    btn.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        btn.click();
+      }
     });
   });
 </script>
