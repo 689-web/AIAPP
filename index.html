@@ -38,6 +38,34 @@
     line-height:1.6; -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:960px;margin:0 auto;padding:2.5rem 1.5rem 4rem;}
+  .topbar{
+    position:sticky; top:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between; gap:.8rem;
+    margin:-2.5rem -1.5rem 1.5rem; padding:.7rem 1.5rem;
+    background:color-mix(in srgb,var(--paper) 92%,transparent);
+    border-bottom:1px solid color-mix(in srgb,var(--line) 70%,transparent);
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  }
+  .topbar-title{font-size:.78rem;font-weight:700;letter-spacing:.04em;color:var(--ink-soft);}
+  .topbar-actions{display:flex;gap:.45rem;}
+  .topbar button,.back-top{
+    border:1px solid var(--line); background:var(--card); color:var(--ink);
+    font:600 .76rem 'Inter',sans-serif; border-radius:999px; cursor:pointer;
+    min-height:36px; padding:.4rem .75rem; transition:.15s;
+  }
+  .topbar button:hover,.back-top:hover{transform:translateY(-1px);}
+  .back-top{
+    position:fixed; right:1.2rem; bottom:1.2rem; z-index:90;
+    width:42px; height:42px; padding:0; display:grid; place-items:center;
+    opacity:0; visibility:hidden; transform:translateY(8px);
+    transition:opacity .2s,visibility .2s,transform .2s;
+    box-shadow:0 6px 20px rgba(0,0,0,.08);
+  }
+  .back-top.show{opacity:1;visibility:visible;transform:translateY(0);}
+  @media (max-width:640px){
+    .topbar-title{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .topbar button{font-size:.72rem;padding:.4rem .65rem;}
+  }
   header.top{margin-bottom:1.8rem;}
   h1{
     font-family:'Newsreader',Georgia,serif; font-weight:600;
@@ -51,6 +79,9 @@
 
   nav.tracks{
     display:flex; gap:.6rem; margin:1.8rem 0 0; border-bottom:1px solid var(--line);
+    position:sticky; top:53px; z-index:80;
+    background:color-mix(in srgb,var(--paper) 94%,transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
   }
   nav.tracks button{
     font-family:'Newsreader',serif; font-size:1.05rem; font-weight:600;
@@ -147,11 +178,31 @@
   @media (max-width:640px){
     .grid{grid-template-columns:1fr;}
     .timeline{grid-template-columns:1fr;}
+    .wrap{padding-left:1rem;padding-right:1rem;}
+    .topbar{margin-left:-1rem;margin-right:-1rem;padding-left:1rem;padding-right:1rem;}
+    nav.tracks{top:53px;margin-left:-.1rem;margin-right:-.1rem;}
+    nav.tracks button{flex:1;text-align:center;font-size:.98rem;padding:.65rem .1rem .8rem;}
+    nav.tracks button + button{margin-left:0;}
+    .track-panel{margin-top:1.35rem;}
+    .school-switch{overflow-x:auto;padding-bottom:.2rem;scrollbar-width:none;}
+    .school-switch::-webkit-scrollbar{display:none;}
+    .school-switch button{white-space:nowrap;min-height:40px;}
+    .card{padding:1.05rem 1rem 1.15rem;}
+    .card h2{font-size:1.08rem;line-height:1.35;}
+    .card ul{font-size:.9rem;}
+    .timeline .stage{padding:1rem;}
+    .cal-item{padding:1rem;}
   }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="topbar">
+    <div class="topbar-title">ADMISSIONS PLANNER · AY2026</div>
+    <div class="topbar-actions">
+      <button type="button" id="homeBtn" aria-label="回到顶部">顶部</button>
+    </div>
+  </div>
 
   <header class="top">
     <h1>医科与法律申请规划</h1>
@@ -460,6 +511,15 @@
 </div>
 
 <script>
+  const homeBtn = document.getElementById('homeBtn');
+  const backTop = document.getElementById('backTop');
+  const goTop = () => window.scrollTo({top:0, behavior:'smooth'});
+  homeBtn.addEventListener('click', goTop);
+  backTop.addEventListener('click', goTop);
+  window.addEventListener('scroll', ()=>{
+    backTop.classList.toggle('show', window.scrollY > 420);
+  }, {passive:true});
+
   document.querySelectorAll('nav.tracks button').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       document.querySelectorAll('nav.tracks button').forEach(b=>b.classList.remove('active'));
